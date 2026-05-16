@@ -8,13 +8,13 @@
     {
       "kind": "main",
       "tag": "com-yourcompany-sac-advanced-ai-planning-widget",
-      "url": "/webcomponent.js",
+      "url": "https://arnav973.github.io/AIAGENT/webcomponent.js",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-yourcompany-sac-advanced-ai-planning-widget-styling",
-      "url": "/styling.js",
+      "url": "https://arnav973.github.io/AIAGENT/styling.js",
       "ignoreIntegrity": true
     }
   ],
