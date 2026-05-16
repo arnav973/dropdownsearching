@@ -1,7 +1,7 @@
 {
   "id": "com.yourcompany.sac.advancedaiplanningwidget",
   "version": "1.8.9",
-  "name": "Arnav",
+  "name": "Advanced AI Planning Widget",
   "description": "Advanced SAC custom widget for AI-assisted planning actions, insights, and model suggestions.",
   "newInstancePrefix": "AI Planning Widget",
   "vendor": "Arnav",
