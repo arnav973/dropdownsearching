@@ -4,17 +4,21 @@
   "name": "Arnav",
   "description": "Advanced SAC custom widget for AI-assisted planning actions, insights, and model suggestions.",
   "newInstancePrefix": "AI Planning Widget",
+  "vendor": "Arnav",
+  "license": "Apache-2.0",
   "webcomponents": [
     {
       "kind": "main",
       "tag": "com-yourcompany-sac-advanced-ai-planning-widget",
       "url": "https://arnav973.github.io/AIAGENT/webcomponent.js",
+      "integrity": "",
       "ignoreIntegrity": true
     },
     {
       "kind": "styling",
       "tag": "com-yourcompany-sac-advanced-ai-planning-widget-styling",
       "url": "https://arnav973.github.io/AIAGENT/styling.js",
+      "integrity": "",
       "ignoreIntegrity": true
     }
   ],
@@ -81,14 +85,28 @@
     }
   },
   "methods": {
-    "runPrompt": {},
-    "setPrompt": {},
-    "clearOutput": {},
-    "setApiConfig": {}
+    "runPrompt": {
+      "description": "Run a prompt programmatically"
+    },
+    "setPrompt": {
+      "description": "Set the prompt value"
+    },
+    "clearOutput": {
+      "description": "Clear the output panel"
+    },
+    "setApiConfig": {
+      "description": "Update API configuration at runtime"
+    }
   },
   "events": {
-    "onResult": {},
-    "onError": {},
-    "onAction": {}
+    "onResult": {
+      "description": "Fired when a result is returned"
+    },
+    "onError": {
+      "description": "Fired when an error occurs"
+    },
+    "onAction": {
+      "description": "Fired when a user clicks an action button"
+    }
   }
 }
