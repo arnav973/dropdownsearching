@@ -2,7 +2,7 @@
   "id": "com.arnav.searchdropdown",
   "version": "1.6.0",
   "name": "Search Dropdown",
-  "description": "Enterprise Search Dropdown for SAC Planning",
+  "description": "Dropdown for SAC Planning",
   "newInstancePrefix": "SearchDropdown",
   "vendor": "Arnav Choudhary",
 
