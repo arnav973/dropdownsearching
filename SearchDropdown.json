@@ -46,11 +46,17 @@
 
   "methods": {
 
-    "setData": {
+    ""setData": {
 
-      "description": "Set JSON Data"
+  "description": "Set JSON Data",
+  "parameters": [
+    {
+      "name": "data",
+      "type": "string"
+    }
+  ]
 
-    },
+},
 
     "getSelectedKey": {
 
