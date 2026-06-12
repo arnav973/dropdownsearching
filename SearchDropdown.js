@@ -239,6 +239,22 @@ class SearchDropdown extends HTMLElement {
 
     }
 
+    setData(data) {
+
+    try {
+
+        this._data = JSON.parse(data);
+
+        this.renderItems();
+
+    }
+    catch (e) {
+
+        console.log(e);
+
+    }
+
+}
     getSelectedKey() {
 
         return this.selectedKey || "";
