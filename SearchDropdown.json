@@ -46,7 +46,7 @@
 
   "methods": {
 
-    ""setData": {
+    "setData": {
 
   "description": "Set JSON Data",
   "parameters": [
