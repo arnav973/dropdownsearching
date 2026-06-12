@@ -189,14 +189,23 @@ class SearchDropdown extends HTMLElement {
                     that.searchBox.value =
                     this.innerHTML;
 
-                    that.selectedKey =
-                    key;
+                    that.selectedKey = key;
 
-                    that.selectedText =
-                    this.innerHTML;
+that.selectedText = this.innerHTML;
 
-                    that.dropdown.style.display =
-                    "none";
+that.dropdown.style.display = "none";
+
+that.dispatchEvent(
+    new CustomEvent(
+        "onSelectionChange",
+        {
+            detail: {
+                key: key,
+                text: that.selectedText
+            }
+        }
+    )
+);
 
                 }
             );
