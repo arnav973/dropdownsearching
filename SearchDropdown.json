@@ -28,14 +28,21 @@
 
   "properties": {
 
-    "placeholder": {
+  "placeholder": {
 
-      "type": "string",
-      "default": "Search..."
-
-    }
+    "type": "string",
+    "default": "Search..."
 
   },
+
+  "items": {
+
+    "type": "string",
+    "default": "[]"
+
+  }
+
+},
 
   "methods": {
 
