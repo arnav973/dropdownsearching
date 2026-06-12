@@ -9,12 +9,16 @@ template.innerHTML = `
     width: 100%;
     font-family: Arial, sans-serif;
 }
+.input-wrap {
+    position: relative;
+    width: 100%;
+}
 .search-box {
     width: 100%;
     height: 36px;
     border: 1px solid #d9d9d9;
     border-radius: 4px;
-    padding: 0 10px;
+    padding: 0 32px 0 10px;
     box-sizing: border-box;
     cursor: pointer;
     font-size: 13px;
@@ -24,9 +28,27 @@ template.innerHTML = `
     border-color: #0a6ed1;
     box-shadow: 0 0 0 2px rgba(10,110,209,0.12);
 }
+.clear-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 14px;
+    color: #8c9ba5;
+    display: none;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
+}
+.clear-btn:hover {
+    color: #d9212c;
+}
 </style>
-<div>
+<div class="input-wrap">
     <input class="search-box" type="text" placeholder="Search..." autocomplete="off" />
+    <button class="clear-btn" title="Clear">&#x2715;</button>
 </div>
 `;
 
@@ -42,14 +64,16 @@ class SearchDropdown extends HTMLElement {
         this.selectedText = "";
         this._dropdownEl  = null;
         this._isOpen      = false;
+        this._skipFocus   = false;  // flag to prevent focus after click
         this.searchBox    = this.shadowRoot.querySelector(".search-box");
+        this.clearBtn     = this.shadowRoot.querySelector(".clear-btn");
     }
 
     connectedCallback() {
 
         var that = this;
 
-        // Create dropdown div on document.body — escapes all SAC overflow clipping
+        // Create dropdown on document.body — escapes all SAC overflow/z-index clipping
         that._dropdownEl = document.createElement("div");
         that._dropdownEl.style.cssText = [
             "position:fixed",
@@ -68,9 +92,10 @@ class SearchDropdown extends HTMLElement {
 
         document.body.appendChild(that._dropdownEl);
 
-        // Click on input
+        // ── CLICK on input box ──────────────────────────────
         that.searchBox.addEventListener("click", function (e) {
             e.stopPropagation();
+            that._skipFocus = true;  // suppress the focus event that fires right after
             if (that._isOpen) {
                 that._closeDropdown();
             } else {
@@ -78,14 +103,19 @@ class SearchDropdown extends HTMLElement {
             }
         });
 
-        // Focus on input
+        // ── FOCUS — only runs when tabbed in, not after click ──
         that.searchBox.addEventListener("focus", function () {
+            if (that._skipFocus) {
+                that._skipFocus = false;
+                return;
+            }
             that._openDropdown(that._data);
         });
 
-        // Type to filter
+        // ── TYPE to filter ──────────────────────────────────
         that.searchBox.addEventListener("input", function () {
             var val = that.searchBox.value;
+            that.clearBtn.style.display = val.length > 0 ? "block" : "none";
             if (val === "") {
                 that._openDropdown(that._data);
             } else {
@@ -93,14 +123,24 @@ class SearchDropdown extends HTMLElement {
             }
         });
 
-        // ESC to close
+        // ── ESC to close ────────────────────────────────────
         that.searchBox.addEventListener("keydown", function (e) {
             if (e.key === "Escape") {
                 that._closeDropdown();
+                that.searchBox.blur();
             }
         });
 
-        // Click outside to close
+        // ── CLEAR button ────────────────────────────────────
+        that.clearBtn.addEventListener("mousedown", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            that.clear();
+            that.searchBox.focus();
+            that._openDropdown(that._data);
+        });
+
+        // ── Click OUTSIDE to close ──────────────────────────
         document.addEventListener("click", function (e) {
             if (
                 that._isOpen &&
@@ -110,25 +150,34 @@ class SearchDropdown extends HTMLElement {
                 that._closeDropdown();
             }
         });
+
+        // ── Reposition on scroll/resize ─────────────────────
+        window.addEventListener("scroll", function () {
+            if (that._isOpen) { that._repositionDropdown(); }
+        }, true);
+
+        window.addEventListener("resize", function () {
+            if (that._isOpen) { that._repositionDropdown(); }
+        });
     }
 
     disconnectedCallback() {
-        // Clean up dropdown from body when widget removed
         if (this._dropdownEl && this._dropdownEl.parentNode) {
             this._dropdownEl.parentNode.removeChild(this._dropdownEl);
         }
     }
 
-    _openDropdown(data) {
-
+    _repositionDropdown() {
         var box = this.searchBox.getBoundingClientRect();
+        this._dropdownEl.style.top   = box.bottom + "px";
+        this._dropdownEl.style.left  = box.left   + "px";
+        this._dropdownEl.style.width = box.width  + "px";
+    }
 
-        this._dropdownEl.style.top     = box.bottom + "px";
-        this._dropdownEl.style.left    = box.left   + "px";
-        this._dropdownEl.style.width   = box.width  + "px";
+    _openDropdown(data) {
+        this._repositionDropdown();
         this._dropdownEl.style.display = "block";
         this._isOpen = true;
-
         this._renderItems(data);
     }
 
@@ -144,14 +193,9 @@ class SearchDropdown extends HTMLElement {
         var i      = 0;
 
         for (i = 0; i < this._data.length; i++) {
-
             var itemText = String(this._data[i].text || "").toLowerCase();
             var itemKey  = String(this._data[i].key  || "").toLowerCase();
-
-            if (
-                itemText.indexOf(search) > -1 ||
-                itemKey.indexOf(search)  > -1
-            ) {
+            if (itemText.indexOf(search) > -1 || itemKey.indexOf(search) > -1) {
                 result.push(this._data[i]);
             }
         }
@@ -177,87 +221,71 @@ class SearchDropdown extends HTMLElement {
 
         for (i = 0; i < items.length; i++) {
 
-            var row = document.createElement("div");
+            (function (item) {
 
-            row.style.cssText = [
-                "padding:8px 12px",
-                "cursor:pointer",
-                "border-bottom:1px solid #f5f5f5",
-                "color:#1d2d3e"
-            ].join(";");
+                var row = document.createElement("div");
+                row.style.cssText = [
+                    "padding:8px 12px",
+                    "cursor:pointer",
+                    "border-bottom:1px solid #f5f5f5",
+                    "color:#1d2d3e"
+                ].join(";");
 
-            row.textContent = String(items[i].text || "");
+                row.textContent = String(item.text || "");
+                row.setAttribute("data-key",  String(item.key  || ""));
+                row.setAttribute("data-text", String(item.text || ""));
 
-            row.setAttribute("data-key",  String(items[i].key  || ""));
-            row.setAttribute("data-text", String(items[i].text || ""));
+                row.addEventListener("mouseover", function () {
+                    this.style.background = "#e6f0ff";
+                    this.style.color      = "#0a6ed1";
+                });
 
-            row.addEventListener("mouseover", function () {
-                this.style.background = "#e6f0ff";
-                this.style.color      = "#0a6ed1";
-            });
+                row.addEventListener("mouseout", function () {
+                    this.style.background = "#fff";
+                    this.style.color      = "#1d2d3e";
+                });
 
-            row.addEventListener("mouseout", function () {
-                this.style.background = "#fff";
-                this.style.color      = "#1d2d3e";
-            });
+                // mousedown fires BEFORE blur — selection is safe
+                row.addEventListener("mousedown", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
 
-            row.addEventListener("mousedown", function (e) {
+                    var key  = this.getAttribute("data-key");
+                    var text = this.getAttribute("data-text");
 
-                // mousedown before blur — prevent close
-                e.preventDefault();
-                e.stopPropagation();
+                    that.searchBox.value        = text;
+                    that.selectedKey            = key;
+                    that.selectedText           = text;
+                    that.clearBtn.style.display = "block";
 
-                var key  = this.getAttribute("data-key");
-                var text = this.getAttribute("data-text");
+                    that._closeDropdown();
 
-                that.searchBox.value  = text;
-                that.selectedKey      = key;
-                that.selectedText     = text;
+                    console.log("SearchDropdown selected: key=" + key + " text=" + text);
 
-                that._closeDropdown();
+                    that.dispatchEvent(
+                        new CustomEvent("onSelectionChange", {
+                            detail:   { key: key, text: text },
+                            bubbles:  true,
+                            composed: true
+                        })
+                    );
+                });
 
-                console.log(
-                    "SearchDropdown selected: key=" + key +
-                    " text=" + text
-                );
+                that._dropdownEl.appendChild(row);
 
-                that.dispatchEvent(
-                    new CustomEvent("onSelectionChange", {
-                        detail:   { key: key, text: text },
-                        bubbles:  true,
-                        composed: true
-                    })
-                );
-            });
-
-            that._dropdownEl.appendChild(row);
+            })(items[i]);
         }
     }
 
+    // ── Public API ──────────────────────────────────────────
+
     setData(data) {
-
         try {
-
-            if (!data || data === "") {
-                console.log("SearchDropdown setData: empty data");
-                return;
-            }
-
+            if (!data || data === "") { return; }
             var parsed = JSON.parse(data);
-
-            if (!Array.isArray(parsed)) {
-                console.log("SearchDropdown setData: not an array");
-                return;
-            }
-
+            if (!Array.isArray(parsed)) { return; }
             this._data = parsed;
-
-            console.log(
-                "SearchDropdown setData success: " +
-                this._data.length +
-                " records loaded"
-            );
-
+            console.log("SearchDropdown setData success: " + this._data.length + " records loaded");
         } catch (e) {
             console.log("SearchDropdown setData parse error: " + e.message);
         }
@@ -267,24 +295,21 @@ class SearchDropdown extends HTMLElement {
     getSelectedText() { return this.selectedText || ""; }
 
     clear() {
-        this.searchBox.value = "";
-        this.selectedKey     = "";
-        this.selectedText    = "";
+        this.searchBox.value        = "";
+        this.selectedKey            = "";
+        this.selectedText           = "";
+        this.clearBtn.style.display = "none";
         this._closeDropdown();
     }
 
     selectByKey(key) {
-
         var i = 0;
-
         for (i = 0; i < this._data.length; i++) {
-
             if (this._data[i].key === key) {
-
-                this.searchBox.value = this._data[i].text;
-                this.selectedKey     = key;
-                this.selectedText    = this._data[i].text;
-
+                this.searchBox.value        = this._data[i].text;
+                this.selectedKey            = key;
+                this.selectedText           = this._data[i].text;
+                this.clearBtn.style.display = "block";
                 this.dispatchEvent(
                     new CustomEvent("onSelectionChange", {
                         detail:   { key: key, text: this._data[i].text },
@@ -292,7 +317,6 @@ class SearchDropdown extends HTMLElement {
                         composed: true
                     })
                 );
-
                 return;
             }
         }
@@ -305,11 +329,9 @@ class SearchDropdown extends HTMLElement {
     }
 
     onCustomWidgetAfterUpdate() {
-
         if (this._props.placeholder) {
             this.searchBox.placeholder = this._props.placeholder;
         }
-
         if (this._props.items) {
             try {
                 var parsed = JSON.parse(this._props.items);
