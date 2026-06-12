@@ -135,7 +135,6 @@ class SearchDropdown extends HTMLElement {
     this._items = [];
 
     this.visibleCount = 50;
-}
 
         this.searchBox =
             this.shadowRoot.querySelector(".search-box");
