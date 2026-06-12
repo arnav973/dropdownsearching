@@ -1,13 +1,12 @@
 {
   "id": "com.arnav.searchdropdown",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "name": "Search Dropdown",
-  "description": "Search Dropdown",
+  "description": "Enterprise Search Dropdown for SAC Planning",
   "newInstancePrefix": "SearchDropdown",
   "vendor": "Arnav Choudhary",
 
   "webcomponents": [
-
     {
       "kind": "main",
       "tag": "com-arnav-searchdropdown",
@@ -15,7 +14,6 @@
       "integrity": "",
       "ignoreIntegrity": true
     },
-
     {
       "kind": "builder",
       "tag": "com-arnav-searchdropdown-builder",
@@ -23,67 +21,65 @@
       "integrity": "",
       "ignoreIntegrity": true
     }
-
   ],
 
   "properties": {
 
-  "placeholder": {
+    "placeholder": {
+      "type": "string",
+      "default": "Search..."
+    },
 
-    "type": "string",
-    "default": "Search..."
+    "items": {
+      "type": "string",
+      "default": "[]"
+    }
 
   },
-
-  "items": {
-
-    "type": "string",
-    "default": "[]"
-
-  }
-
-},
 
   "methods": {
 
     "setData": {
-
-  "description": "Set JSON Data",
-  "parameters": [
-    {
-      "name": "data",
-      "type": "string"
-    }
-  ]
-
-},
+      "description": "Load JSON array string into dropdown",
+      "parameters": [
+        {
+          "name": "jsonString",
+          "type": "string"
+        }
+      ]
+    },
 
     "getSelectedKey": {
-
+      "description": "Returns the key of the selected item",
       "returnType": "string"
-
     },
 
     "getSelectedText": {
-
+      "description": "Returns the text of the selected item",
       "returnType": "string"
-
     },
 
-    "clear": {},
+    "clear": {
+      "description": "Clears current selection and input"
+    },
 
-    "selectByKey": {}
+    "selectByKey": {
+      "description": "Programmatically select item by key",
+      "parameters": [
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ]
+    }
 
   },
 
   "events": {
 
     "onSelectionChange": {
-
-      "description": "Selection Changed"
-
+      "description": "Fired when user selects an item. detail = { key, text }"
     }
 
   }
-
 }
