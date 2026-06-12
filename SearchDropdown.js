@@ -1,321 +1,469 @@
 (function () {
 
-var template = document.createElement("template");
+    var template = document.createElement("template");
 
-template.innerHTML = `
-<style>
+    template.innerHTML = `
+    <style>
 
-:host{
-    display:block;
-    width:100%;
-    font-family:Arial,sans-serif;
-}
+        :host {
+            display: block;
+            width: 100%;
+            font-family: "72", "Segoe UI", Arial, sans-serif;
+        }
 
-.container{
-    position:relative;
-    width:100%;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-.search-box{
-    width:100%;
-    height:36px;
-    border:1px solid #d9d9d9;
-    border-radius:4px;
-    padding:0 10px;
-    box-sizing:border-box;
-}
+        .container {
+            position: relative;
+            width: 100%;
+        }
 
-.dropdown{
-    position:absolute;
-    top:40px;
-    left:0;
-    right:0;
-    background:#fff;
-    border:1px solid #d9d9d9;
-    max-height:250px;
-    overflow-y:auto;
-    display:none;
-    z-index:9999;
-}
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: #ffffff;
+            height: 36px;
+            padding: 0 8px;
+            transition: border-color 0.2s;
+        }
 
-.item{
-    padding:8px;
-    cursor:pointer;
-}
+        .search-wrapper:focus-within {
+            border-color: #0a6ed1;
+            box-shadow: 0 0 0 2px rgba(10,110,209,0.12);
+        }
 
-.item:hover{
-    background:#f5f5f5;
-}
+        .search-box {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            color: #1d2d3e;
+            background: transparent;
+            height: 100%;
+            min-width: 0;
+        }
 
-</style>
+        .search-box::placeholder {
+            color: #8c9ba5;
+            font-size: 12px;
+        }
 
-<div class="container">
-    <input class="search-box" placeholder="Search..." />
-    <div class="dropdown"></div>
-</div>
-`;
+        .clear-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #8c9ba5;
+            font-size: 14px;
+            padding: 0 2px;
+            display: none;
+            line-height: 1;
+            flex-shrink: 0;
+        }
 
-class SearchDropdown extends HTMLElement {
+        .clear-btn:hover {
+            color: #d9261c;
+        }
 
-    constructor() {
+        .dropdown {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            max-height: 260px;
+            overflow-y: auto;
+            display: none;
+            z-index: 99999;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+        }
 
-        super();
+        .count-badge {
+            padding: 5px 10px;
+            font-size: 10px;
+            color: #8c9ba5;
+            background: #f5f6f7;
+            border-bottom: 1px solid #eeeeee;
+            position: sticky;
+            top: 0;
+        }
 
-        this.attachShadow({
-            mode: "open"
-        });
+        .item {
+            padding: 9px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #1d2d3e;
+            border-bottom: 1px solid #f5f5f5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-        this.shadowRoot.appendChild(
-            template.content.cloneNode(true)
-        );
+        .item:last-child {
+            border-bottom: none;
+        }
 
-        this._props = {};
-        this._data = [];
+        .item:hover {
+            background: #e8f0fd;
+            color: #0a6ed1;
+        }
 
-        this.searchBox =
-            this.shadowRoot.querySelector(".search-box");
+        .item.selected {
+            background: #e8f0fd;
+            color: #0a6ed1;
+            font-weight: 600;
+        }
 
-        this.dropdown =
-            this.shadowRoot.querySelector(".dropdown");
-    }
+        .no-data {
+            padding: 12px;
+            font-size: 12px;
+            color: #8c9ba5;
+            text-align: center;
+        }
 
-    connectedCallback() {
+    </style>
 
-        var that = this;
+    <div class="container">
+        <div class="search-wrapper">
+            <input
+                class="search-box"
+                type="text"
+                placeholder="Search..."
+                autocomplete="off"
+            />
+            <button class="clear-btn" title="Clear">&#x2715;</button>
+        </div>
+        <div class="dropdown"></div>
+    </div>
+    `;
 
-        that.searchBox.addEventListener(
-    "focus",
-    function () {
+    class SearchDropdown extends HTMLElement {
 
-        that.dropdown.style.display =
-        "block";
+        constructor() {
 
-        that.renderItems(
-            that._data
-        );
+            super();
 
-    }
-);
+            this.attachShadow({ mode: "open" });
 
-        that.searchBox.addEventListener(
-            "keyup",
-            function () {
-
-                that.filterData(
-                    that.searchBox.value
-                );
-
-            }
-        );
-    }
-
-    filterData(text) {
-
-    var search =
-    text.toLowerCase();
-
-    var result = [];
-
-    for(
-        var i = 0;
-        i < this._data.length;
-        i++
-    ){
-
-        if(
-            String(
-                this._data[i].text
-            )
-            .toLowerCase()
-            .indexOf(search)
-            > -1
-        ){
-
-            result.push(
-                this._data[i]
+            this.shadowRoot.appendChild(
+                template.content.cloneNode(true)
             );
 
+            this._props        = {};
+            this._data         = [];
+            this._selectedKey  = "";
+            this._selectedText = "";
+            this._isOpen       = false;
+
+            this.searchBox = this.shadowRoot.querySelector(".search-box");
+            this.dropdown  = this.shadowRoot.querySelector(".dropdown");
+            this.clearBtn  = this.shadowRoot.querySelector(".clear-btn");
         }
 
-    }
+        connectedCallback() {
 
-    this.dropdown.style.display =
-    "block";
+            var that = this;
 
-    this.renderItems(
-        result
-    );
+            // Focus → show all items
+            that.searchBox.addEventListener("focus", function () {
+                that._showDropdown();
+                that._renderItems(that._data);
+            });
 
-}
+            // Keyup → filter live
+            that.searchBox.addEventListener("input", function () {
+                var val = that.searchBox.value;
+                that.clearBtn.style.display = val.length > 0 ? "block" : "none";
+                if (val.length === 0) {
+                    that._renderItems(that._data);
+                } else {
+                    that._filterData(val);
+                }
+                that._showDropdown();
+            });
 
-    renderItems(data) {
+            // Clear button
+            that.clearBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                that.clear();
+            });
 
-        var that = this;
+            // Outside click closes dropdown
+            document.addEventListener("click", function (e) {
+                if (!that.contains(e.target)) {
+                    that._hideDropdown();
+                }
+            });
 
-        var items =
-            data || this._data;
-
-        var html = "";
-
-        for (var i = 0; i < items.length; i++) {
-
-            html +=
-            '<div class="item" data-key="' +
-            items[i].key +
-            '">' +
-            items[i].text +
-            '</div>';
-
+            // ESC key closes dropdown
+            that.searchBox.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    that._hideDropdown();
+                }
+            });
         }
 
-        that.dropdown.innerHTML = html;
+        // ── Show dropdown ─────────────────────────────────────────
+        _showDropdown() {
+            this.dropdown.style.display = "block";
+            this._isOpen = true;
+        }
 
-        var rows =
-        that.dropdown.querySelectorAll(
-            ".item"
-        );
+        // ── Hide dropdown ─────────────────────────────────────────
+        _hideDropdown() {
+            this.dropdown.style.display = "none";
+            this._isOpen = false;
+        }
 
-        for (var j = 0; j < rows.length; j++) {
+        // ── Filter data by search text ────────────────────────────
+        _filterData(text) {
 
-            rows[j].addEventListener(
-                "click",
-                function () {
+            var search = (text || "").toLowerCase().trim();
+            var result = [];
 
-                    var key =
-                    this.getAttribute(
-                        "data-key"
+            for (var i = 0; i < this._data.length; i++) {
+
+                var itemText = String(
+                    this._data[i].text || ""
+                ).toLowerCase();
+
+                var itemKey = String(
+                    this._data[i].key || ""
+                ).toLowerCase();
+
+                if (
+                    itemText.indexOf(search) > -1 ||
+                    itemKey.indexOf(search) > -1
+                ) {
+                    result.push(this._data[i]);
+                }
+            }
+
+            this._renderItems(result);
+        }
+
+        // ── Render dropdown items ─────────────────────────────────
+        _renderItems(data) {
+
+            var that  = this;
+            var items = data || this._data;
+
+            if (!items || items.length === 0) {
+                that.dropdown.innerHTML =
+                    '<div class="no-data">No results found</div>';
+                return;
+            }
+
+            var html =
+                '<div class="count-badge">' +
+                items.length +
+                " item(s)" +
+                "</div>";
+
+            for (var i = 0; i < items.length; i++) {
+
+                var isSelected =
+                    items[i].key === that._selectedKey
+                        ? " selected"
+                        : "";
+
+                var safeText = String(items[i].text || "")
+                    .replace(/"/g, "&quot;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;");
+
+                var safeKey = String(items[i].key || "")
+                    .replace(/"/g, "&quot;");
+
+                html +=
+                    '<div class="item' +
+                    isSelected +
+                    '" data-key="' +
+                    safeKey +
+                    '" data-text="' +
+                    safeText +
+                    '">' +
+                    safeText +
+                    "</div>";
+            }
+
+            that.dropdown.innerHTML = html;
+
+            var rows = that.dropdown.querySelectorAll(".item");
+
+            for (var j = 0; j < rows.length; j++) {
+
+                rows[j].addEventListener("click", function (e) {
+
+                    e.stopPropagation();
+
+                    var key  = this.getAttribute("data-key");
+                    var text = this.getAttribute("data-text");
+
+                    that._selectedKey  = key;
+                    that._selectedText = text;
+
+                    that.searchBox.value        = text;
+                    that.clearBtn.style.display = "block";
+
+                    that._hideDropdown();
+
+                    that.dispatchEvent(
+                        new CustomEvent("onSelectionChange", {
+                            detail: { key: key, text: text },
+                            bubbles: true,
+                            composed: true
+                        })
                     );
 
-                    that.searchBox.value =
-                    this.innerHTML;
-
-                    that.selectedKey = key;
-
-that.selectedText = this.innerHTML;
-
-that.dropdown.style.display = "none";
-
-that.dispatchEvent(
-    new CustomEvent(
-        "onSelectionChange",
-        {
-            detail: {
-                key: key,
-                text: that.selectedText
+                    console.log(
+                        "SearchDropdown → Selected key:",
+                        key,
+                        "text:",
+                        text
+                    );
+                });
             }
         }
-    )
-);
 
+        // ── SAC Widget Lifecycle ──────────────────────────────────
+        onCustomWidgetBeforeUpdate(changedProperties) {
+            for (var prop in changedProperties) {
+                this._props[prop] = changedProperties[prop];
+            }
+        }
+
+        onCustomWidgetAfterUpdate() {
+
+            if (this._props.placeholder) {
+                this.searchBox.placeholder = this._props.placeholder;
+            }
+
+            if (this._props.items) {
+                try {
+                    var parsed = JSON.parse(this._props.items);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        this._data = parsed;
+                        console.log(
+                            "SearchDropdown items from props:",
+                            this._data.length
+                        );
+                    }
+                } catch (e) {
+                    console.log(
+                        "SearchDropdown props parse error:",
+                        e
+                    );
                 }
-            );
-
+            }
         }
 
-    }
+        // ── Public API (SAC Script callable) ─────────────────────
 
-    onCustomWidgetBeforeUpdate(
-        changedProperties
-    ) {
+        // Called from SAC onInitialization to load members
+        setData(jsonString) {
 
-        for (
-            var prop in changedProperties
-        ) {
+            try {
 
-            this._props[prop] =
-            changedProperties[prop];
+                if (
+                    jsonString === null ||
+                    jsonString === undefined ||
+                    jsonString === ""
+                ) {
+                    console.log("SearchDropdown setData: empty input");
+                    return;
+                }
 
+                var parsed = JSON.parse(jsonString);
+
+                if (!Array.isArray(parsed)) {
+                    console.log(
+                        "SearchDropdown setData: input is not an array"
+                    );
+                    return;
+                }
+
+                this._data = parsed;
+
+                console.log(
+                    "SearchDropdown setData success:",
+                    this._data.length,
+                    "records loaded"
+                );
+
+                // Pre-render so items are ready when user clicks
+                this._renderItems(this._data);
+
+            } catch (e) {
+                console.log(
+                    "SearchDropdown setData parse error:",
+                    e.message
+                );
+            }
         }
 
-    }
-
-    onCustomWidgetAfterUpdate() {
-
-        if (
-            this._props.placeholder
-        ) {
-
-            this.searchBox.placeholder =
-            this._props.placeholder;
-
+        // Get selected key
+        getSelectedKey() {
+            return this._selectedKey || "";
         }
 
-        if (this._props.items) {
+        // Get selected text / description
+        getSelectedText() {
+            return this._selectedText || "";
+        }
 
-    try {
+        // Clear selection and input
+        clear() {
+            this._selectedKey  = "";
+            this._selectedText = "";
+            this.searchBox.value        = "";
+            this.clearBtn.style.display = "none";
+            this._hideDropdown();
+        }
 
-        this._data =
-        JSON.parse(this._props.items);
+        // Programmatically select by key
+        selectByKey(key) {
 
-        console.log(
-            "Items Property Loaded:",
-            this._data.length
-        );
+            for (var i = 0; i < this._data.length; i++) {
 
-        this.renderItems(
-            this._data
-        );
+                if (this._data[i].key === key) {
 
-    }
-    catch (e) {
+                    this._selectedKey  = key;
+                    this._selectedText = this._data[i].text;
 
-        console.log(
-            "Items Property Error",
-            e
-        );
+                    this.searchBox.value        = this._data[i].text;
+                    this.clearBtn.style.display = "block";
 
-    }
+                    console.log(
+                        "SearchDropdown selectByKey:",
+                        key
+                    );
 
-}
+                    this.dispatchEvent(
+                        new CustomEvent("onSelectionChange", {
+                            detail: {
+                                key: key,
+                                text: this._data[i].text
+                            },
+                            bubbles: true,
+                            composed: true
+                        })
+                    );
 
-    }
-
-   setData(data) {
-
-    try {
-
-        this._data = JSON.parse(data);
-
-        alert(
-            "Records Loaded:",
-            this._data.length
-        );
-
-        this.dropdown.style.display =
-        "block";
-
-        this.renderItems(
-            this._data
-        );
-
-    }
-    catch (e) {
-
-        console.log(
-            "setData Error",
-            e
-        );
-
+                    break;
+                }
+            }
+        }
     }
 
-}
-    getSelectedKey() {
-
-        return this.selectedKey || "";
-
-    }
-
-    getSelectedText() {
-
-        return this.selectedText || "";
-
-    }
-
-}
-
-customElements.define(
-    "com-arnav-searchdropdown",
-    SearchDropdown
-);
+    customElements.define(
+        "com-arnav-searchdropdown",
+        SearchDropdown
+    );
 
 })();
