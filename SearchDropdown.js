@@ -84,14 +84,18 @@ class SearchDropdown extends HTMLElement {
         var that = this;
 
         that.searchBox.addEventListener(
-            "focus",
-            function () {
+    "focus",
+    function () {
 
-                that.dropdown.style.display = "block";
-                that.renderItems();
+        that.dropdown.style.display =
+        "block";
 
-            }
+        that.renderItems(
+            that._data
         );
+
+    }
+);
 
         that.searchBox.addEventListener(
             "keyup",
@@ -107,30 +111,42 @@ class SearchDropdown extends HTMLElement {
 
     filterData(text) {
 
-        var search =
-            text.toLowerCase();
+    var search =
+    text.toLowerCase();
 
-        var result = [];
+    var result = [];
 
-        for (var i = 0; i < this._data.length; i++) {
+    for(
+        var i = 0;
+        i < this._data.length;
+        i++
+    ){
 
-            if (
+        if(
+            String(
                 this._data[i].text
-                .toLowerCase()
-                .indexOf(search) > -1
-            ) {
+            )
+            .toLowerCase()
+            .indexOf(search)
+            > -1
+        ){
 
-                result.push(
-                    this._data[i]
-                );
-
-            }
+            result.push(
+                this._data[i]
+            );
 
         }
 
-        this.renderItems(result);
-
     }
+
+    this.dropdown.style.display =
+    "block";
+
+    this.renderItems(
+        result
+    );
+
+}
 
     renderItems(data) {
 
@@ -239,18 +255,31 @@ class SearchDropdown extends HTMLElement {
 
     }
 
-    setData(data) {
+   setData(data) {
 
     try {
 
         this._data = JSON.parse(data);
 
-        this.renderItems();
+        console.log(
+            "Records Loaded:",
+            this._data.length
+        );
+
+        this.dropdown.style.display =
+        "block";
+
+        this.renderItems(
+            this._data
+        );
 
     }
     catch (e) {
 
-        console.log(e);
+        console.log(
+            "setData Error",
+            e
+        );
 
     }
 
