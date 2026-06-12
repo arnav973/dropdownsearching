@@ -1,97 +1,139 @@
 (function () {
 
-let template =
-document.createElement("template");
+    var template = document.createElement("template");
 
-template.innerHTML = `
-<form id="form">
+    template.innerHTML = `
+    <style>
 
-<table>
+        :host {
+            display: block;
+            font-family: "72", "Segoe UI", Arial, sans-serif;
+            padding: 12px;
+        }
 
-<tr>
-<td>Placeholder</td>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-<td>
-<input
-id="placeholder"
-type="text">
-</td>
+        td {
+            padding: 6px 4px;
+            font-size: 13px;
+            vertical-align: middle;
+        }
 
-</tr>
+        td:first-child {
+            font-weight: 600;
+            color: #1d2d3e;
+            width: 110px;
+        }
 
-</table>
+        input[type="text"] {
+            width: 100%;
+            height: 32px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            padding: 0 8px;
+            font-size: 13px;
+            box-sizing: border-box;
+            outline: none;
+        }
 
-<button type="submit">
-Update
-</button>
+        input[type="text"]:focus {
+            border-color: #0a6ed1;
+        }
 
-</form>
-`;
+        button[type="submit"] {
+            margin-top: 10px;
+            width: 100%;
+            height: 32px;
+            background: #0a6ed1;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+        }
 
-class BuilderPanel extends HTMLElement {
+        button[type="submit"]:hover {
+            background: #085caf;
+        }
 
-constructor(){
+    </style>
 
-super();
+    <form id="form">
 
-this.attachShadow({
-mode:"open"
-});
+        <table>
 
-this.shadowRoot.appendChild(
-template.content.cloneNode(true)
-);
+            <tr>
+                <td>Placeholder</td>
+                <td>
+                    <input
+                        id="placeholder"
+                        type="text"
+                        placeholder="Search..."
+                    />
+                </td>
+            </tr>
 
-this.shadowRoot
-.getElementById("form")
-.addEventListener(
-"submit",
-this.submit.bind(this)
-);
+        </table>
 
-}
+        <button type="submit">Update</button>
 
-submit(e){
+    </form>
+    `;
 
-e.preventDefault();
+    class BuilderPanel extends HTMLElement {
 
-this.dispatchEvent(
-new CustomEvent(
-"propertiesChanged",
-{
-detail:{
-properties:{
-placeholder:
-this.placeholder
-}
-}
-}
-)
-);
+        constructor() {
 
-}
+            super();
 
-set placeholder(value){
+            this.attachShadow({ mode: "open" });
 
-this.shadowRoot
-.getElementById("placeholder")
-.value=value;
+            this.shadowRoot.appendChild(
+                template.content.cloneNode(true)
+            );
 
-}
+            this.shadowRoot
+                .getElementById("form")
+                .addEventListener(
+                    "submit",
+                    this._submit.bind(this)
+                );
+        }
 
-get placeholder(){
+        _submit(e) {
 
-return this.shadowRoot
-.getElementById("placeholder")
-.value;
+            e.preventDefault();
 
-}
+            this.dispatchEvent(
+                new CustomEvent("propertiesChanged", {
+                    detail: {
+                        properties: {
+                            placeholder: this.placeholder
+                        }
+                    }
+                })
+            );
+        }
 
-}
+        set placeholder(value) {
+            this.shadowRoot
+                .getElementById("placeholder")
+                .value = value || "";
+        }
 
-customElements.define(
-"com-arnav-searchdropdown-builder",
-BuilderPanel
-);
+        get placeholder() {
+            return this.shadowRoot
+                .getElementById("placeholder")
+                .value || "";
+        }
+    }
+
+    customElements.define(
+        "com-arnav-searchdropdown-builder",
+        BuilderPanel
+    );
 
 })();
