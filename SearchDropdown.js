@@ -121,18 +121,21 @@ class SearchDropdown extends HTMLElement {
 
     constructor() {
 
-        super();
+    super();
 
-        this.attachShadow({mode:"open"});
-        this.shadowRoot.appendChild(
-            template.content.cloneNode(true)
-        );
+    this.attachShadow({mode:"open"});
 
-        this._props = {};
-        this._data = [];
-        this._filtered = [];
+    this.shadowRoot.appendChild(
+        template.content.cloneNode(true)
+    );
 
-        this.visibleCount = 50;
+    this._props = {};
+    this._data = [];
+    this._filtered = [];
+    this._items = [];
+
+    this.visibleCount = 50;
+}
 
         this.searchBox =
             this.shadowRoot.querySelector(".search-box");
@@ -351,14 +354,34 @@ class SearchDropdown extends HTMLElement {
 
     onCustomWidgetAfterUpdate(){
 
-        if(this._props.placeholder){
+    if(this._props.placeholder){
 
-            this.searchBox.placeholder =
-            this._props.placeholder;
+        this.searchBox.placeholder =
+        this._props.placeholder;
+
+    }
+
+    if(this._props.items){
+
+        try{
+
+            this._data =
+            JSON.parse(this._props.items);
+
+            this._filtered =
+            [...this._data];
+
+            this.renderItems();
+
+        }catch(e){
+
+            console.error(e);
 
         }
 
     }
+
+}
 
 }
 
