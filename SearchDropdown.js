@@ -4,18 +4,11 @@ var template = document.createElement("template");
 
 template.innerHTML = `
 <style>
-
 :host {
     display: block;
     width: 100%;
     font-family: Arial, sans-serif;
 }
-
-.container {
-    position: relative;
-    width: 100%;
-}
-
 .search-box {
     width: 100%;
     height: 36px;
@@ -27,97 +20,70 @@ template.innerHTML = `
     font-size: 13px;
     outline: none;
 }
-
 .search-box:focus {
     border-color: #0a6ed1;
     box-shadow: 0 0 0 2px rgba(10,110,209,0.12);
 }
-
-.dropdown {
-    position: absolute;
-    top: 38px;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    max-height: 250px;
-    overflow-y: auto;
-    display: none;
-    z-index: 99999;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    box-sizing: border-box;
-}
-
-.item {
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #1d2d3e;
-    border-bottom: 1px solid #f5f5f5;
-}
-
-.item:last-child {
-    border-bottom: none;
-}
-
-.item:hover {
-    background: #e6f0ff;
-    color: #0a6ed1;
-}
-
-.no-data {
-    padding: 10px 12px;
-    font-size: 12px;
-    color: #8c9ba5;
-    text-align: center;
-}
-
 </style>
-
-<div class="container">
+<div>
     <input class="search-box" type="text" placeholder="Search..." autocomplete="off" />
-    <div class="dropdown"></div>
 </div>
 `;
 
 class SearchDropdown extends HTMLElement {
 
     constructor() {
-
         super();
-
         this.attachShadow({ mode: "open" });
-
-        this.shadowRoot.appendChild(
-            template.content.cloneNode(true)
-        );
-
+        this.shadowRoot.appendChild(template.content.cloneNode(true));
         this._props       = {};
         this._data        = [];
         this.selectedKey  = "";
         this.selectedText = "";
-
-        this.searchBox = this.shadowRoot.querySelector(".search-box");
-        this.dropdown  = this.shadowRoot.querySelector(".dropdown");
+        this._dropdownEl  = null;
+        this._isOpen      = false;
+        this.searchBox    = this.shadowRoot.querySelector(".search-box");
     }
 
     connectedCallback() {
 
         var that = this;
 
-        // Click on input → show all items
+        // Create dropdown div on document.body — escapes all SAC overflow clipping
+        that._dropdownEl = document.createElement("div");
+        that._dropdownEl.style.cssText = [
+            "position:fixed",
+            "background:#fff",
+            "border:1px solid #d9d9d9",
+            "border-radius:4px",
+            "max-height:250px",
+            "overflow-y:auto",
+            "display:none",
+            "z-index:2147483647",
+            "min-width:200px",
+            "box-shadow:0 4px 12px rgba(0,0,0,0.18)",
+            "font-family:Arial,sans-serif",
+            "font-size:13px"
+        ].join(";");
+
+        document.body.appendChild(that._dropdownEl);
+
+        // Click on input
         that.searchBox.addEventListener("click", function (e) {
             e.stopPropagation();
-            that._openDropdown(that._data);
+            if (that._isOpen) {
+                that._closeDropdown();
+            } else {
+                that._openDropdown(that._data);
+            }
         });
 
-        // Focus on input → show all items
+        // Focus on input
         that.searchBox.addEventListener("focus", function () {
             that._openDropdown(that._data);
         });
 
-        // Typing → filter
+        // Type to filter
         that.searchBox.addEventListener("input", function () {
             var val = that.searchBox.value;
             if (val === "") {
@@ -127,56 +93,64 @@ class SearchDropdown extends HTMLElement {
             }
         });
 
-        // ESC key → close
+        // ESC to close
         that.searchBox.addEventListener("keydown", function (e) {
             if (e.key === "Escape") {
-                that.dropdown.style.display = "none";
+                that._closeDropdown();
             }
         });
 
-        // Click inside container → do not close
-        that.shadowRoot
-            .querySelector(".container")
-            .addEventListener("click", function (e) {
-                e.stopPropagation();
-            });
-
-        // Click outside shadow root → close
-        // Use the host element blur approach — most reliable in SAC iframe
-        that.searchBox.addEventListener("blur", function () {
-            // Small delay so item click fires before close
-            setTimeout(function () {
-                that.dropdown.style.display = "none";
-            }, 200);
+        // Click outside to close
+        document.addEventListener("click", function (e) {
+            if (
+                that._isOpen &&
+                e.target !== that.searchBox &&
+                !that._dropdownEl.contains(e.target)
+            ) {
+                that._closeDropdown();
+            }
         });
     }
 
-    // Open and position dropdown
+    disconnectedCallback() {
+        // Clean up dropdown from body when widget removed
+        if (this._dropdownEl && this._dropdownEl.parentNode) {
+            this._dropdownEl.parentNode.removeChild(this._dropdownEl);
+        }
+    }
+
     _openDropdown(data) {
-        this.dropdown.style.display = "block";
+
+        var box = this.searchBox.getBoundingClientRect();
+
+        this._dropdownEl.style.top     = box.bottom + "px";
+        this._dropdownEl.style.left    = box.left   + "px";
+        this._dropdownEl.style.width   = box.width  + "px";
+        this._dropdownEl.style.display = "block";
+        this._isOpen = true;
+
         this._renderItems(data);
     }
 
-    // Filter data by search text
+    _closeDropdown() {
+        this._dropdownEl.style.display = "none";
+        this._isOpen = false;
+    }
+
     _filterData(text) {
 
         var search = (text || "").toLowerCase();
         var result = [];
-        var i = 0;
+        var i      = 0;
 
         for (i = 0; i < this._data.length; i++) {
 
-            var itemText = String(
-                this._data[i].text || ""
-            ).toLowerCase();
-
-            var itemKey = String(
-                this._data[i].key || ""
-            ).toLowerCase();
+            var itemText = String(this._data[i].text || "").toLowerCase();
+            var itemKey  = String(this._data[i].key  || "").toLowerCase();
 
             if (
                 itemText.indexOf(search) > -1 ||
-                itemKey.indexOf(search) > -1
+                itemKey.indexOf(search)  > -1
             ) {
                 result.push(this._data[i]);
             }
@@ -185,45 +159,53 @@ class SearchDropdown extends HTMLElement {
         this._openDropdown(result);
     }
 
-    // Render items into dropdown
     _renderItems(data) {
 
         var that  = this;
         var items = data || this._data;
-        var html  = "";
         var i     = 0;
 
+        that._dropdownEl.innerHTML = "";
+
         if (!items || items.length === 0) {
-            that.dropdown.innerHTML =
-                '<div class="no-data">No results found</div>';
+            var noData = document.createElement("div");
+            noData.style.cssText = "padding:10px 12px;color:#8c9ba5;text-align:center;";
+            noData.textContent   = "No results found";
+            that._dropdownEl.appendChild(noData);
             return;
         }
 
         for (i = 0; i < items.length; i++) {
 
-            // Safely encode for HTML attribute
-            var safeKey  = String(items[i].key  || "").replace(/"/g, "&quot;");
-            var safeText = String(items[i].text || "").replace(/"/g, "&quot;");
+            var row = document.createElement("div");
 
-            html +=
-                '<div class="item"' +
-                ' data-key="'  + safeKey  + '"' +
-                ' data-text="' + safeText + '">' +
-                String(items[i].text || "") +
-                '</div>';
-        }
+            row.style.cssText = [
+                "padding:8px 12px",
+                "cursor:pointer",
+                "border-bottom:1px solid #f5f5f5",
+                "color:#1d2d3e"
+            ].join(";");
 
-        that.dropdown.innerHTML = html;
+            row.textContent = String(items[i].text || "");
 
-        var rows = that.dropdown.querySelectorAll(".item");
-        var j    = 0;
+            row.setAttribute("data-key",  String(items[i].key  || ""));
+            row.setAttribute("data-text", String(items[i].text || ""));
 
-        for (j = 0; j < rows.length; j++) {
+            row.addEventListener("mouseover", function () {
+                this.style.background = "#e6f0ff";
+                this.style.color      = "#0a6ed1";
+            });
 
-            rows[j].addEventListener("mousedown", function (e) {
+            row.addEventListener("mouseout", function () {
+                this.style.background = "#fff";
+                this.style.color      = "#1d2d3e";
+            });
 
-                // mousedown fires before blur — prevents dropdown closing
+            row.addEventListener("mousedown", function (e) {
+
+                // mousedown before blur — prevent close
                 e.preventDefault();
+                e.stopPropagation();
 
                 var key  = this.getAttribute("data-key");
                 var text = this.getAttribute("data-text");
@@ -232,25 +214,26 @@ class SearchDropdown extends HTMLElement {
                 that.selectedKey      = key;
                 that.selectedText     = text;
 
-                that.dropdown.style.display = "none";
+                that._closeDropdown();
 
                 console.log(
-                    "SearchDropdown selected key: " + key +
-                    " text: " + text
+                    "SearchDropdown selected: key=" + key +
+                    " text=" + text
                 );
 
                 that.dispatchEvent(
                     new CustomEvent("onSelectionChange", {
-                        detail: { key: key, text: text },
+                        detail:   { key: key, text: text },
                         bubbles:  true,
                         composed: true
                     })
                 );
             });
+
+            that._dropdownEl.appendChild(row);
         }
     }
 
-    // Called from SAC script
     setData(data) {
 
         try {
@@ -276,25 +259,18 @@ class SearchDropdown extends HTMLElement {
             );
 
         } catch (e) {
-            console.log(
-                "SearchDropdown setData parse error: " + e.message
-            );
+            console.log("SearchDropdown setData parse error: " + e.message);
         }
     }
 
-    getSelectedKey() {
-        return this.selectedKey || "";
-    }
-
-    getSelectedText() {
-        return this.selectedText || "";
-    }
+    getSelectedKey()  { return this.selectedKey  || ""; }
+    getSelectedText() { return this.selectedText || ""; }
 
     clear() {
-        this.searchBox.value        = "";
-        this.selectedKey            = "";
-        this.selectedText           = "";
-        this.dropdown.style.display = "none";
+        this.searchBox.value = "";
+        this.selectedKey     = "";
+        this.selectedText    = "";
+        this._closeDropdown();
     }
 
     selectByKey(key) {
@@ -311,10 +287,7 @@ class SearchDropdown extends HTMLElement {
 
                 this.dispatchEvent(
                     new CustomEvent("onSelectionChange", {
-                        detail: {
-                            key:  key,
-                            text: this._data[i].text
-                        },
+                        detail:   { key: key, text: this._data[i].text },
                         bubbles:  true,
                         composed: true
                     })
@@ -350,9 +323,6 @@ class SearchDropdown extends HTMLElement {
     }
 }
 
-customElements.define(
-    "com-arnav-searchdropdown",
-    SearchDropdown
-);
+customElements.define("com-arnav-searchdropdown", SearchDropdown);
 
 })();
