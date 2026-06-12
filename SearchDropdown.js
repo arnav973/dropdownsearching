@@ -240,27 +240,33 @@ that.dispatchEvent(
 
         }
 
-        if (
-            this._props.items
-        ) {
+        if (this._props.items) {
 
-            try {
+    try {
 
-                this._data =
-                JSON.parse(
-                    this._props.items
-                );
+        this._data =
+        JSON.parse(this._props.items);
 
-                this.renderItems();
+        console.log(
+            "Items Property Loaded:",
+            this._data.length
+        );
 
-            }
-            catch (e) {
+        this.renderItems(
+            this._data
+        );
 
-                console.log(e);
+    }
+    catch (e) {
 
-            }
+        console.log(
+            "Items Property Error",
+            e
+        );
 
-        }
+    }
+
+}
 
     }
 
