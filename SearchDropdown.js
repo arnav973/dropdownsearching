@@ -276,7 +276,7 @@ that.dispatchEvent(
 
         this._data = JSON.parse(data);
 
-        console.log(
+        alert(
             "Records Loaded:",
             this._data.length
         );
