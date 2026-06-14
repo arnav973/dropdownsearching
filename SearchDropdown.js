@@ -376,27 +376,36 @@ customElements.define("com-arnav-searchdropdown", SearchDropdown);
         }
 
         .search-box {
-            width: 100%;
-            height: 36px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            padding: 0 32px 0 10px;
-            box-sizing: border-box;
-            cursor: text;
-            font-size: 13px;
-            outline: none;
-            color: #1d2d3e;
-            background: #ffffff;
-        }
+        width: 100%;
+        height: 38px;
+        border: 1px solid #2f3c48;
+        border-radius: 6px;
+        padding: 0 36px 0 12px;
+        box-sizing: border-box;
+        cursor: text;
+        font-size: 14px;
+        font-family: "72", Arial, sans-serif;
+        outline: none;
+        color: #1f2d3d;
+        background: #ffffff;
+        box-shadow: none;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
 
-        .search-box:focus {
-            border-color: #0a6ed1;
-            box-shadow: 0 0 0 2px rgba(10,110,209,0.12);
-        }
-
-        .search-box::placeholder {
-            color: #8c9ba5;
-        }
+        .search-box:hover {
+        border-color: #1f2d3d;
+        background: #ffffff;
+    }
+    
+    .search-box:focus {
+        border: 1px solid #0a6ed1;
+        background: #ffffff;
+        box-shadow: 0 0 0 1px #0a6ed1;
+    }
+    
+    .search-box::placeholder {
+        color: #6a7681;
+    }
 
         .clear-btn {
             position: absolute;
