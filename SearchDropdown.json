@@ -1,11 +1,11 @@
 {
   "id": "com.arnav.searchdropdown",
-  "version": "1.6.0",
+  "version": "1.6.2",
   "name": "Search Dropdown",
   "description": "Dropdown for SAC Planning",
   "newInstancePrefix": "SearchDropdown",
   "vendor": "Arnav Choudhary",
-
+  "icon": "sap-icon://drop-down-list",
   "webcomponents": [
     {
       "kind": "main",
