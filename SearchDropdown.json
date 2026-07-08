@@ -5,8 +5,7 @@
   "description": "Dropdown for SAC Planning",
   "newInstancePrefix": "SearchDropdown",
   "vendor": "Arnav Choudhary",
-  "icon": "sap-icon://drop-down-list",
-  "webcomponents": [
+  "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABUUlEQVR4nO2ayxHCMAxEF4YrRdAeBdEeRVAAnHICJ3G0+g37rsRGpLQkz9mWZcl5wkh+g+0JQJIkSZIkSZIkSZIkSZL+R7gA3j5hQm7bV4hL0Jx3I4R9GQH6Q2Vb3g2xG7M5z8xP0vKf4Q7gW8B+1m0YgF+At4A7gA+AS4BjwDPAKeB44A3gEeAO4BngM+Am8AN4HngFvAEeB94AbgHPAJeAG8ATwF3gDPAEeBJ4BbwBXgJeAE8At4CjwE3gBPAJeAK8BJ4BfwBngA+Aa8AV4CXgBPALeAo8BN4ATwCXgCvASeAX8AZ4APgGvAFeAl4ATwC3gKPATeAE8Al4ArwEngF/AGeAD4BrwBXgJeAE8At4CjwE3gBPAJeAK8BJ4BfwBngA+Aa8AV4CXgBPALeAo8BN4ATwCXgCvASeAX8AZ4APgP+gP8B0a9o3XQj9XQAAAAASUVORK5CYII=",  "webcomponents": [
     {
       "kind": "main",
       "tag": "com-arnav-searchdropdown",
