@@ -5,7 +5,7 @@
   "description": "Dropdown for SAC Planning",
   "newInstancePrefix": "SearchDropdown",
   "vendor": "Arnav Choudhary",
-  "icon": "https://arnav973.github.io/dropdownsearching/search_widget_icon_64.png",  
+  "icon": "https://arnav973.github.io/dropdownsearching/search_widget_icon_66.png",  
   "webcomponents": [
     {
       "kind": "main",
