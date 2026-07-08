@@ -11,15 +11,15 @@
       "kind": "main",
       "tag": "com-arnav-searchdropdown",
       "url": "https://arnav973.github.io/dropdownsearching/SearchDropdown.js",
-      "integrity": "",
-      "ignoreIntegrity": true
+      "integrity": "sha384-d8OU/J3ltolINp1xf55PTTXKUINkH4M1S/GFSXAEZoUEp/1EJyFut9ep9abLiIZT",
+      "ignoreIntegrity": false
     },
     {
       "kind": "builder",
       "tag": "com-arnav-searchdropdown-builder",
       "url": "https://arnav973.github.io/dropdownsearching/SearchDropdown_Builder.js",
-      "integrity": "",
-      "ignoreIntegrity": true
+      "integrity": "sha384-zbQ0CN+K4JDeLHDwzCkFiq6HeiptCbq5Lnv1f4uwfOzwoUkOGHR4/xHmp9j1d8Lm",
+      "ignoreIntegrity": false
     }
   ],
 
