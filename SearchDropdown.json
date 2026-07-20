@@ -11,15 +11,15 @@
       "kind": "main",
       "tag": "com-arnav-searchdropdown",
       "url": "SearchDropdown.js",
-      "integrity": "",
-      "ignoreIntegrity": false
+      "integrity": "sha384-local",
+      "ignoreIntegrity": true
     },
     {
       "kind": "builder",
       "tag": "com-arnav-searchdropdown-builder",
       "url": "SearchDropdown_Builder.js",
-      "integrity": "",
-      "ignoreIntegrity": false
+      "integrity": "sha384-local",
+      "ignoreIntegrity": true
     }
   ],
   "properties": {
