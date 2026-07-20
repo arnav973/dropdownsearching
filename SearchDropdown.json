@@ -1,21 +1,22 @@
 {
   "id": "com.arnav.searchdropdown",
-  "version": "1.8.8",
+  "version": "1.0.9",
   "name": "Search Dropdown",
   "description": "Searchable dropdown custom widget",
   "newInstancePrefix": "com.arnav.searchdropdown",
+  "icon": "search_widget_icon_66.png",
   "webcomponents": [
     {
       "kind": "main",
       "tag": "com-arnav-searchdropdown",
       "url": "SearchDropdown.js",
-      "integrity": ""
+      "ignoreIntegrity": true
     },
     {
       "kind": "builder",
       "tag": "com-arnav-searchdropdown-builder",
       "url": "SearchDropdown_Builder.js",
-      "integrity": ""
+      "ignoreIntegrity": true
     }
   ],
   "properties": {
@@ -28,16 +29,26 @@
       "default": "[]"
     }
   },
+  "methods": {
+    "setData": {
+      "description": "Set dropdown items as JSON string"
+    },
+    "getSelectedKey": {
+      "description": "Get selected key"
+    },
+    "getSelectedText": {
+      "description": "Get selected text"
+    },
+    "clear": {
+      "description": "Clear current selection"
+    },
+    "selectByKey": {
+      "description": "Select item by key"
+    }
+  },
   "events": {
     "onSelectionChange": {
-      "parameters": {
-        "key": {
-          "type": "string"
-        },
-        "text": {
-          "type": "string"
-        }
-      }
+      "description": "Triggered when selection changes"
     }
   }
 }
