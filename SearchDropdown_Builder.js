@@ -6,111 +6,71 @@
     }
 
     var template = document.createElement("template");
-
     template.innerHTML = `
-    <style>
-        :host {
-            display: block;
-            font-family: "72", "Segoe UI", Arial, sans-serif;
-            padding: 12px;
-            box-sizing: border-box;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        td {
-            padding: 6px 4px;
-            font-size: 13px;
-            vertical-align: middle;
-        }
-
-        td:first-child {
-            font-weight: 600;
-            color: #1d2d3e;
-            width: 110px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            height: 32px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            padding: 0 8px;
-            font-size: 13px;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        input[type="text"]:focus {
-            border-color: #0a6ed1;
-        }
-
-        button[type="submit"] {
-            margin-top: 10px;
-            width: 100%;
-            height: 32px;
-            background: #0a6ed1;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        button[type="submit"]:hover {
-            background: #085caf;
-        }
-    </style>
-
-    <form id="form">
-        <table>
-            <tr>
-                <td>Placeholder</td>
-                <td>
-                    <input id="placeholder" type="text" placeholder="Search..." />
-                </td>
-            </tr>
-        </table>
-        <button type="submit">Update</button>
-    </form>
+        <style>
+            :host {
+                display: block;
+                font-family: Arial, sans-serif;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            .row {
+                margin-bottom: 10px;
+            }
+            label {
+                display: block;
+                margin-bottom: 4px;
+                font-size: 12px;
+                color: #333;
+            }
+            input {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 6px 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 13px;
+            }
+        </style>
+        <div class="row">
+            <label for="placeholder">Placeholder</label>
+            <input id="placeholder" type="text" />
+        </div>
     `;
 
-    class BuilderPanel extends HTMLElement {
+    class SearchDropdownBuilder extends HTMLElement {
         constructor() {
             super();
-
             this.attachShadow({ mode: "open" });
             this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-            this._form = this.shadowRoot.getElementById("form");
             this._placeholderInput = this.shadowRoot.getElementById("placeholder");
-
-            this._form.addEventListener("submit", this._submit.bind(this));
         }
 
-        _submit(e) {
-            e.preventDefault();
+        connectedCallback() {
+            var that = this;
 
-            this.dispatchEvent(new CustomEvent("propertiesChanged", {
-                detail: {
-                    properties: {
-                        placeholder: this.placeholder
+            this._placeholderInput.addEventListener("input", function () {
+                that.dispatchEvent(new CustomEvent("propertiesChanged", {
+                    detail: {
+                        properties: {
+                            placeholder: that._placeholderInput.value
+                        }
                     }
-                }
-            }));
+                }));
+            });
         }
 
         set placeholder(value) {
-            this._placeholderInput.value = value || "";
+            if (this._placeholderInput) {
+                this._placeholderInput.value = value || "";
+            }
         }
 
         get placeholder() {
-            return this._placeholderInput.value || "";
+            return this._placeholderInput ? this._placeholderInput.value : "";
         }
     }
 
-    customElements.define("com-arnav-searchdropdown-builder", BuilderPanel);
+    customElements.define("com-arnav-searchdropdown-builder", SearchDropdownBuilder);
 })();
