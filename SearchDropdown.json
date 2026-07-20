@@ -1,44 +1,34 @@
 {
-  "id": "com.arnav.searchdropdown",
-  "version": "1.6.2",
+  "id": "com.arnav.searchdropdown.local",
+  "version": "1.6.3",
   "name": "Search Dropdown",
   "description": "Dropdown for SAC Planning",
   "newInstancePrefix": "SearchDropdown",
   "vendor": "Arnav Choudhary",
-  "icon": "https://arnav973.github.io/dropdownsearching/search_widget_icon_66.png",  
+  "icon": "search_widget_icon_66.png",
   "webcomponents": [
     {
       "kind": "main",
       "tag": "com-arnav-searchdropdown",
-      "url": "https://arnav973.github.io/dropdownsearching/SearchDropdown.js",
-      "integrity": "sha384-d8OU/J3ltolINp1xf55PTTXKUINkH4M1S/GFSXAEZoUEp/1EJyFut9ep9abLiIZT",
-      "ignoreIntegrity": false
+      "url": "SearchDropdown.js"
     },
     {
       "kind": "builder",
       "tag": "com-arnav-searchdropdown-builder",
-      "url": "https://arnav973.github.io/dropdownsearching/SearchDropdown_Builder.js",
-      "integrity": "sha384-zbQ0CN+K4JDeLHDwzCkFiq6HeiptCbq5Lnv1f4uwfOzwoUkOGHR4/xHmp9j1d8Lm",
-      "ignoreIntegrity": false
+      "url": "SearchDropdown_Builder.js"
     }
   ],
-
   "properties": {
-
     "placeholder": {
       "type": "string",
       "default": "Search..."
     },
-
     "items": {
       "type": "string",
       "default": "[]"
     }
-
   },
-
   "methods": {
-
     "setData": {
       "description": "Load JSON array string into dropdown",
       "parameters": [
@@ -48,21 +38,17 @@
         }
       ]
     },
-
     "getSelectedKey": {
       "description": "Returns the key of the selected item",
       "returnType": "string"
     },
-
     "getSelectedText": {
       "description": "Returns the text of the selected item",
       "returnType": "string"
     },
-
     "clear": {
       "description": "Clears current selection and input"
     },
-
     "selectByKey": {
       "description": "Programmatically select item by key",
       "parameters": [
@@ -72,14 +58,10 @@
         }
       ]
     }
-
   },
-
   "events": {
-
     "onSelectionChange": {
       "description": "Fired when user selects an item. detail = { key, text }"
     }
-
   }
 }
