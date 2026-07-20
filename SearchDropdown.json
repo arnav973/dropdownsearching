@@ -1,25 +1,21 @@
 {
-  "id": "com.arnav.searchdropdown.local163",
-  "version": "1.6.3",
+  "id": "com.arnav.searchdropdown",
+  "version": "1.8.8",
   "name": "Search Dropdown",
-  "description": "Dropdown for SAC Planning",
-  "newInstancePrefix": "SearchDropdown",
-  "vendor": "Arnav Choudhary",
-  "icon": "search_widget_icon_66.png",
+  "description": "Searchable dropdown custom widget",
+  "newInstancePrefix": "com.arnav.searchdropdown",
   "webcomponents": [
     {
       "kind": "main",
       "tag": "com-arnav-searchdropdown",
-      "url": "/SearchDropdown.js",
-      "integrity": "",
-      "ignoreIntegrity": true
+      "url": "SearchDropdown.js",
+      "integrity": ""
     },
     {
       "kind": "builder",
       "tag": "com-arnav-searchdropdown-builder",
-      "url": "/SearchDropdown_Builder.js",
-      "integrity": "",
-      "ignoreIntegrity": true
+      "url": "SearchDropdown_Builder.js",
+      "integrity": ""
     }
   ],
   "properties": {
@@ -32,40 +28,16 @@
       "default": "[]"
     }
   },
-  "methods": {
-    "setData": {
-      "description": "Load JSON array string into dropdown",
-      "parameters": [
-        {
-          "name": "jsonString",
-          "type": "string"
-        }
-      ]
-    },
-    "getSelectedKey": {
-      "description": "Returns the key of the selected item",
-      "returnType": "string"
-    },
-    "getSelectedText": {
-      "description": "Returns the text of the selected item",
-      "returnType": "string"
-    },
-    "clear": {
-      "description": "Clears current selection and input"
-    },
-    "selectByKey": {
-      "description": "Programmatically select item by key",
-      "parameters": [
-        {
-          "name": "key",
-          "type": "string"
-        }
-      ]
-    }
-  },
   "events": {
     "onSelectionChange": {
-      "description": "Fired when user selects an item. detail = { key, text }"
+      "parameters": {
+        "key": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
     }
   }
 }
