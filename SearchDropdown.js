@@ -1,5 +1,5 @@
-
 (function () {
+    "use strict";
 
     if (customElements.get("com-arnav-searchdropdown")) {
         return;
@@ -23,36 +23,36 @@
         }
 
         .search-box {
-        width: 100%;
-        height: 38px;
-        border: 1px solid #2f3c48;
-        border-radius: 6px;
-        padding: 0 36px 0 12px;
-        box-sizing: border-box;
-        cursor: text;
-        font-size: 14px;
-        font-family: "72", Arial, sans-serif;
-        outline: none;
-        color: #1f2d3d;
-        background: #ffffff;
-        box-shadow: none;
-        transition: border-color 0.2s ease, background-color 0.2s ease;
-    }
+            width: 100%;
+            height: 38px;
+            border: 1px solid #2f3c48;
+            border-radius: 6px;
+            padding: 0 36px 0 12px;
+            box-sizing: border-box;
+            cursor: text;
+            font-size: 14px;
+            font-family: "72", Arial, sans-serif;
+            outline: none;
+            color: #1f2d3d;
+            background: #ffffff;
+            box-shadow: none;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
 
         .search-box:hover {
-        border-color: #1f2d3d;
-        background: #ffffff;
-    }
-    
-    .search-box:focus {
-        border: 1px solid #0a6ed1;
-        background: #ffffff;
-        box-shadow: 0 0 0 1px #0a6ed1;
-    }
-    
-    .search-box::placeholder {
-        color: #6a7681;
-    }
+            border-color: #1f2d3d;
+            background: #ffffff;
+        }
+
+        .search-box:focus {
+            border: 1px solid #0a6ed1;
+            background: #ffffff;
+            box-shadow: 0 0 0 1px #0a6ed1;
+        }
+
+        .search-box::placeholder {
+            color: #6a7681;
+        }
 
         .clear-btn {
             position: absolute;
@@ -96,7 +96,6 @@
     `;
 
     class SearchDropdown extends HTMLElement {
-
         constructor() {
             super();
 
@@ -113,6 +112,7 @@
             this._skipFocus = false;
             this._highlightedIndex = -1;
             this._maxVisibleItems = 500;
+            this._initialized = false;
 
             this.searchBox = this.shadowRoot.querySelector(".search-box");
             this.clearBtn = this.shadowRoot.querySelector(".clear-btn");
@@ -128,15 +128,18 @@
         }
 
         connectedCallback() {
-            if (this._initialized) {
-                return;
+            try {
+                if (this._initialized) {
+                    return;
+                }
+
+                this._initialized = true;
+                this._createDropdown();
+                this._bindEvents();
+                this._syncInputState();
+            } catch (e) {
+                console.error("SearchDropdown connectedCallback error:", e);
             }
-
-            this._initialized = true;
-
-            this._createDropdown();
-            this._bindEvents();
-            this._syncInputState();
         }
 
         disconnectedCallback() {
@@ -151,6 +154,10 @@
         }
 
         _createDropdown() {
+            if (this._dropdownEl) {
+                return;
+            }
+
             this._dropdownEl = document.createElement("div");
             this._dropdownEl.setAttribute("role", "listbox");
             this._dropdownEl.style.cssText = [
@@ -311,13 +318,12 @@
 
         _normalizeData(data) {
             var normalized = [];
-            var i;
 
             if (!Array.isArray(data)) {
                 return normalized;
             }
 
-            for (i = 0; i < data.length; i++) {
+            for (var i = 0; i < data.length; i++) {
                 var row = data[i] || {};
                 normalized.push({
                     key: row.key !== undefined && row.key !== null ? String(row.key) : "",
@@ -338,7 +344,7 @@
         }
 
         _repositionDropdown() {
-            if (!this._dropdownEl) {
+            if (!this._dropdownEl || !this.searchBox) {
                 return;
             }
 
@@ -361,6 +367,10 @@
         }
 
         _openDropdown(data) {
+            if (!this._dropdownEl) {
+                this._createDropdown();
+            }
+
             this._filteredData = Array.isArray(data) ? data.slice(0) : [];
             this._highlightedIndex = this._filteredData.length > 0 ? 0 : -1;
 
@@ -387,9 +397,8 @@
         _applyFilter(text) {
             var search = String(text || "").toLowerCase();
             var result = [];
-            var i;
 
-            for (i = 0; i < this._data.length; i++) {
+            for (var i = 0; i < this._data.length; i++) {
                 var item = this._data[i];
                 var itemText = item.text.toLowerCase();
                 var itemKey = item.key.toLowerCase();
@@ -410,7 +419,6 @@
             var that = this;
             var html = "";
             var displayItems = items.slice(0, this._maxVisibleItems);
-            var i;
 
             this._dropdownEl.innerHTML = "";
 
@@ -422,7 +430,7 @@
                 return;
             }
 
-            for (i = 0; i < displayItems.length; i++) {
+            for (var i = 0; i < displayItems.length; i++) {
                 var item = displayItems[i];
                 var selectedStyle = i === this._highlightedIndex
                     ? "background:#e6f0ff;color:#0a6ed1;"
@@ -456,14 +464,14 @@
 
             var rows = this._dropdownEl.querySelectorAll(".sd-item");
 
-            for (i = 0; i < rows.length; i++) {
-                rows[i].addEventListener("mouseover", function () {
+            for (var j = 0; j < rows.length; j++) {
+                rows[j].addEventListener("mouseover", function () {
                     var idx = parseInt(this.getAttribute("data-index"), 10);
                     that._highlightedIndex = idx;
                     that._refreshHighlight();
                 });
 
-                rows[i].addEventListener("mousedown", function (e) {
+                rows[j].addEventListener("mousedown", function (e) {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -477,9 +485,8 @@
 
         _refreshHighlight() {
             var rows = this._dropdownEl.querySelectorAll(".sd-item");
-            var i;
 
-            for (i = 0; i < rows.length; i++) {
+            for (var i = 0; i < rows.length; i++) {
                 if (i === this._highlightedIndex) {
                     rows[i].style.background = "#e6f0ff";
                     rows[i].style.color = "#0a6ed1";
@@ -516,16 +523,14 @@
             this._syncInputState();
             this._closeDropdown();
 
-            this.dispatchEvent(
-                new CustomEvent("onSelectionChange", {
-                    detail: {
-                        key: item.key,
-                        text: item.text
-                    },
-                    bubbles: true,
-                    composed: true
-                })
-            );
+            this.dispatchEvent(new CustomEvent("onSelectionChange", {
+                detail: {
+                    key: item.key,
+                    text: item.text
+                },
+                bubbles: true,
+                composed: true
+            }));
         }
 
         setData(data) {
@@ -539,14 +544,11 @@
                 var parsed = JSON.parse(data);
                 this._data = this._normalizeData(parsed);
 
-                console.log("SearchDropdown setData success: " + this._data.length + " records loaded");
-
                 if (this._isOpen) {
                     this._applyFilter(this.searchBox.value);
                 }
-
             } catch (e) {
-                console.log("SearchDropdown setData parse error: " + e.message);
+                console.error("SearchDropdown setData parse error:", e);
             }
         }
 
@@ -565,23 +567,20 @@
             this._syncInputState();
             this._closeDropdown();
 
-            this.dispatchEvent(
-                new CustomEvent("onSelectionChange", {
-                    detail: {
-                        key: "",
-                        text: ""
-                    },
-                    bubbles: true,
-                    composed: true
-                })
-            );
+            this.dispatchEvent(new CustomEvent("onSelectionChange", {
+                detail: {
+                    key: "",
+                    text: ""
+                },
+                bubbles: true,
+                composed: true
+            }));
         }
 
         selectByKey(key) {
             var lookupKey = key !== undefined && key !== null ? String(key) : "";
-            var i;
 
-            for (i = 0; i < this._data.length; i++) {
+            for (var i = 0; i < this._data.length; i++) {
                 if (this._data[i].key === lookupKey) {
                     this._selectItem(this._data[i]);
                     return true;
@@ -613,13 +612,11 @@
                         this._applyFilter(this.searchBox.value);
                     }
                 } catch (e) {
-                    console.log("Items Property Error: " + e.message);
+                    console.error("Items Property Error:", e);
                 }
             }
         }
     }
 
     customElements.define("com-arnav-searchdropdown", SearchDropdown);
-
 })();
-
