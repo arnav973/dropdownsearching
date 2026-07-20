@@ -1,6 +1,6 @@
 {
   "id": "com.arnav.searchdropdown",
-  "version": "1.0.9",
+  "version": "1.6.3",
   "name": "Search Dropdown",
   "description": "Searchable dropdown custom widget",
   "newInstancePrefix": "com.arnav.searchdropdown",
