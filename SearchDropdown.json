@@ -4,7 +4,7 @@
   "name": "Search Dropdown",
   "description": "Searchable dropdown custom widget",
   "newInstancePrefix": "com.arnav.searchdropdown",
-  "icon": "search_widget_icon_66.png",
+  "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAKElEQVR42mNgGAWjYBSMglEwCkbBqBgFo2AUjIJRMApGwSgYBaNgFAAAAwAANd0E/qfN3XQAAAAASUVORK5CYII=",
   "webcomponents": [
     {
       "kind": "main",
