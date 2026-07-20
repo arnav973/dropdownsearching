@@ -31,7 +31,7 @@
   },
   "methods": {
     "setData": {
-      "description": "Set dropdown items as JSON string"
+      "description": "Set dropdown data"
     },
     "getSelectedKey": {
       "description": "Get selected key"
@@ -40,15 +40,15 @@
       "description": "Get selected text"
     },
     "clear": {
-      "description": "Clear current selection"
+      "description": "Clear selection"
     },
     "selectByKey": {
-      "description": "Select item by key"
+      "description": "Select by key"
     }
   },
   "events": {
     "onSelectionChange": {
-      "description": "Triggered when selection changes"
+      "description": "Fired when selection changes"
     }
   }
 }
