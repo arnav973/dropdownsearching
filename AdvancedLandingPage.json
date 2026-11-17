@@ -1,8 +1,8 @@
 {
   "id": "com.company.sac.advancedlandingpage",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "name": "Advanced SAC Landing Page",
-  "description": "Premium frontend-driven landing page widget for SAP Analytics Cloud planning stories",
+  "description": "Advanced configurable landing page widget for SAP Analytics Cloud planning stories",
   "vendor": "NTT",
   "newInstancePrefix": "AdvancedLandingPage",
   "icon": "sap-icon://home",
@@ -16,33 +16,29 @@
     }
   ],
   "properties": {
+    "pageKey": {
+      "type": "string",
+      "default": "ADMIN"
+    },
     "configJson": {
       "type": "string",
-      "default": "{\"appTitle\":\"SAP Enterprise Analytics Portal\",\"appSubtitle\":\"Explore business intelligence, reports and planning insights.\",\"environment\":\"Production\",\"logoText\":\"A\",\"heroStyle\":\"blue\",\"showClock\":true,\"allowFavorites\":true,\"allowRecent\":true,\"allowSearch\":true,\"allowThemeSwitch\":true,\"allowDensitySwitch\":true,\"allowViewSwitch\":true,\"maxRecent\":8,\"sections\":[{\"id\":\"datasource\",\"title\":\"DataSource\",\"icon\":\"database\",\"collapsed\":false,\"tiles\":[{\"id\":\"asset_balance_detailed\",\"title\":\"Asset Balance Detailed\",\"subtitle\":\"Open datasource story\",\"icon\":\"database\",\"type\":\"story\",\"target\":\"AHCP_CAPEX_DATASOURCE_DETAIL\",\"accent\":\"#2563eb\",\"roles\":[\"ALL\"],\"tags\":[\"datasource\",\"asset\",\"balance\"],\"favorite\":false,\"disabled\":false},{\"id\":\"asset_balance_summary\",\"title\":\"Asset Balance Summary\",\"subtitle\":\"Open summary datasource\",\"icon\":\"database\",\"type\":\"story\",\"target\":\"AHCP_CAPEX_DATASOURCE_SUMMARY\",\"accent\":\"#0ea5e9\",\"roles\":[\"ALL\"],\"tags\":[\"datasource\",\"summary\"],\"favorite\":false,\"disabled\":false}]},{\"id\":\"planning\",\"title\":\"New Asset Planning\",\"icon\":\"target\",\"collapsed\":false,\"tiles\":[{\"id\":\"create_asset\",\"title\":\"Create New Asset\",\"subtitle\":\"Create planning request\",\"icon\":\"target\",\"type\":\"story\",\"target\":\"CREATE_NEW_ASSET\",\"accent\":\"#2563eb\",\"roles\":[\"PLANNER\",\"ADMIN\",\"ALL\"],\"tags\":[\"create\",\"asset\",\"planning\"],\"favorite\":true,\"disabled\":false},{\"id\":\"upload_asset\",\"title\":\"Upload New Assets\",\"subtitle\":\"Mass load planning assets\",\"icon\":\"upload\",\"type\":\"story\",\"target\":\"UPLOAD_NEW_ASSETS\",\"accent\":\"#06b6d4\",\"roles\":[\"PLANNER\",\"ADMIN\"],\"tags\":[\"upload\",\"mass\",\"planning\"],\"favorite\":false,\"disabled\":false},{\"id\":\"adjust_useful_life\",\"title\":\"Adjust Useful Life\",\"subtitle\":\"Update useful life assumptions\",\"icon\":\"refresh\",\"type\":\"story\",\"target\":\"ADJUST_USEFUL_LIFE\",\"accent\":\"#8b5cf6\",\"roles\":[\"PLANNER\",\"ADMIN\"],\"tags\":[\"useful life\",\"planning\"],\"favorite\":false,\"disabled\":false}]},{\"id\":\"reports\",\"title\":\"Reports\",\"icon\":\"document\",\"collapsed\":false,\"tiles\":[{\"id\":\"capex_spend_review\",\"title\":\"Capex Spend Review\",\"subtitle\":\"Open analytical report\",\"icon\":\"document\",\"type\":\"story\",\"target\":\"CAPEX_SPEND_REVIEW\",\"accent\":\"#f59e0b\",\"roles\":[\"ALL\"],\"tags\":[\"report\",\"capex\",\"spend\"],\"favorite\":true,\"disabled\":false},{\"id\":\"comparison_report\",\"title\":\"Comparison Report\",\"subtitle\":\"Compare plan vs actual\",\"icon\":\"document\",\"type\":\"story\",\"target\":\"COMPARISON_REPORT\",\"accent\":\"#ef4444\",\"roles\":[\"ALL\"],\"tags\":[\"report\",\"comparison\"],\"favorite\":false,\"disabled\":false}]}]}"
-    },
-    "userJson": {
-      "type": "string",
-      "default": "{\"id\":\"guest\",\"name\":\"Guest User\",\"role\":\"ALL\",\"email\":\"\",\"avatarText\":\"GU\"}"
+      "default": "{\"pageTitle\":\"CAPEX Planning Landing Page\",\"pageSubtitle\":\"Manage planning, reports, and business actions.\",\"pageEyebrow\":\"SAP ANALYTICS CLOUD\",\"environment\":\"Production\",\"logoText\":\"A\",\"logoUrl\":\"\",\"heroBackgroundImage\":\"\",\"showClock\":true,\"showHero\":true,\"showSearch\":true,\"showStats\":true,\"showQuickLinksPanel\":true,\"showAnnouncement\":false,\"announcementText\":\"\",\"announcementType\":\"info\",\"showFooter\":true,\"footerText\":\"Developed by Arnav Choudhary\",\"allowThemeSwitch\":true,\"allowDensitySwitch\":true,\"allowViewSwitch\":true,\"sections\":[{\"id\":\"datasource\",\"title\":\"DataSource\",\"subtitle\":\"Review data and balances\",\"icon\":\"database\",\"collapsed\":false,\"tiles\":[{\"id\":\"asset_balance_detailed\",\"title\":\"Asset Balance Detailed\",\"subtitle\":\"Open datasource story\",\"icon\":\"database\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"AHCP_CAPEX_DATASOURCE_DETAIL\",\"accent\":\"#2563eb\",\"tags\":[\"datasource\",\"asset\",\"balance\"],\"disabled\":false,\"actionText\":\"Open\"},{\"id\":\"asset_balance_summary\",\"title\":\"Asset Balance Summary\",\"subtitle\":\"Open summary datasource\",\"icon\":\"database\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"AHCP_CAPEX_DATASOURCE_SUMMARY\",\"accent\":\"#0ea5e9\",\"tags\":[\"datasource\",\"summary\"],\"disabled\":false,\"actionText\":\"Open\"}]},{\"id\":\"planning\",\"title\":\"New Asset Planning\",\"subtitle\":\"Maintain planning actions\",\"icon\":\"target\",\"collapsed\":false,\"tiles\":[{\"id\":\"create_asset\",\"title\":\"Create New Asset\",\"subtitle\":\"Create planning request\",\"icon\":\"target\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CREATE_NEW_ASSET\",\"accent\":\"#2563eb\",\"tags\":[\"create\",\"asset\",\"planning\"],\"disabled\":false,\"actionText\":\"Create\"},{\"id\":\"upload_asset\",\"title\":\"Upload New Assets\",\"subtitle\":\"Mass load planning assets\",\"icon\":\"upload\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"UPLOAD_NEW_ASSETS\",\"accent\":\"#06b6d4\",\"tags\":[\"upload\",\"mass\",\"planning\"],\"disabled\":false,\"actionText\":\"Upload\"},{\"id\":\"adjust_useful_life\",\"title\":\"Adjust Useful Life\",\"subtitle\":\"Update useful life assumptions\",\"icon\":\"refresh\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"ADJUST_USEFUL_LIFE\",\"accent\":\"#8b5cf6\",\"tags\":[\"useful life\",\"planning\"],\"disabled\":false,\"actionText\":\"Open\"}]},{\"id\":\"reports\",\"title\":\"Reports\",\"subtitle\":\"Open reporting stories\",\"icon\":\"document\",\"collapsed\":false,\"tiles\":[{\"id\":\"capex_spend_review\",\"title\":\"Capex Spend Review\",\"subtitle\":\"Open analytical report\",\"icon\":\"document\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CAPEX_SPEND_REVIEW\",\"accent\":\"#f59e0b\",\"tags\":[\"report\",\"capex\",\"spend\"],\"disabled\":false,\"actionText\":\"View\"},{\"id\":\"comparison_report\",\"title\":\"Comparison Report\",\"subtitle\":\"Compare plan vs actual\",\"icon\":\"document\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"COMPARISON_REPORT\",\"accent\":\"#ef4444\",\"tags\":[\"report\",\"comparison\"],\"disabled\":false,\"actionText\":\"View\"}]}]}"
     },
     "statsJson": {
       "type": "string",
-      "default": "{\"modules\":0,\"reports\":0,\"favorites\":0,\"recent\":0}"
+      "default": "{\"card1Label\":\"Modules\",\"card1Value\":\"0\",\"card1Icon\":\"grid\",\"card2Label\":\"Reports\",\"card2Value\":\"0\",\"card2Icon\":\"document\",\"card3Label\":\"Actions\",\"card3Value\":\"0\",\"card3Icon\":\"target\",\"card4Label\":\"Links\",\"card4Value\":\"0\",\"card4Icon\":\"link\"}"
     },
     "themeJson": {
       "type": "string",
       "default": "{\"primary\":\"#0f4c97\",\"secondary\":\"#3b82f6\",\"accent\":\"#60a5fa\",\"surface\":\"#ffffff\",\"background\":\"#eef4fb\",\"text\":\"#12304f\",\"muted\":\"#6b7c93\",\"border\":\"#d9e6f2\",\"heroText\":\"#ffffff\"}"
     },
-    "favoritesJson": {
+    "quickLinksJson": {
       "type": "string",
-      "default": "[]"
+      "default": "[{\"id\":\"quick_admin\",\"title\":\"Admin Cockpit\",\"target\":\"ADMIN_COCKPIT\",\"targetType\":\"story\",\"icon\":\"grid\"},{\"id\":\"quick_actual\",\"title\":\"Actual + Estimate\",\"target\":\"ACTUAL_ESTIMATE\",\"targetType\":\"story\",\"icon\":\"document\"},{\"id\":\"quick_budget\",\"title\":\"Budget\",\"target\":\"BUDGET_PAGE\",\"targetType\":\"story\",\"icon\":\"target\"}]"
     },
-    "recentJson": {
+    "layoutJson": {
       "type": "string",
-      "default": "[]"
-    },
-    "permissionsJson": {
-      "type": "string",
-      "default": "{\"roles\":[\"ALL\"],\"hiddenTiles\":[]}"
+      "default": "{\"heroRadius\":22,\"sectionRadius\":20,\"tileRadius\":18,\"tileMinHeight\":140,\"sectionTitleSize\":24,\"tileTitleSize\":18,\"contentMaxWidth\":\"100%\"}"
     },
     "searchText": {
       "type": "string",
@@ -83,12 +79,6 @@
     "getConfig": {
       "returnType": "string"
     },
-    "setUser": {
-      "description": "Set user profile JSON",
-      "parameters": [
-        { "name": "json", "type": "string" }
-      ]
-    },
     "setStats": {
       "description": "Set KPI statistics JSON",
       "parameters": [
@@ -101,20 +91,14 @@
         { "name": "json", "type": "string" }
       ]
     },
-    "setPermissions": {
-      "description": "Set permissions JSON",
+    "setQuickLinks": {
+      "description": "Set quick links JSON",
       "parameters": [
         { "name": "json", "type": "string" }
       ]
     },
-    "setFavorites": {
-      "description": "Set favorites JSON",
-      "parameters": [
-        { "name": "json", "type": "string" }
-      ]
-    },
-    "setRecent": {
-      "description": "Set recent items JSON",
+    "setLayout": {
+      "description": "Set layout JSON",
       "parameters": [
         { "name": "json", "type": "string" }
       ]
@@ -139,11 +123,13 @@
         { "name": "value", "type": "string" }
       ]
     },
+    "setPageKey": {
+      "parameters": [
+        { "name": "value", "type": "string" }
+      ]
+    },
     "refresh": {
       "description": "Refresh widget UI from current properties"
-    },
-    "resetPersonalization": {
-      "description": "Reset local personalization"
     },
     "getSelectedTile": {
       "returnType": "string"
@@ -154,7 +140,7 @@
   },
   "events": {
     "onTileClick": {},
-    "onFavoriteToggle": {},
+    "onQuickLinkClick": {},
     "onSearch": {},
     "onSectionToggle": {},
     "onConfigChange": {},
