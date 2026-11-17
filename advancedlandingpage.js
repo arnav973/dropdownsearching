@@ -5,12 +5,10 @@
       this._shadowRoot = this.attachShadow({ mode: "open" });
 
       this._config = this._safeJson(this.getAttribute("configJson"), this._defaultConfig());
-      this._stats = this._safeJson(this.getAttribute("statsJson"), this._defaultStats());
       this._theme = this._safeJson(this.getAttribute("themeJson"), this._defaultTheme());
-      this._quickLinks = this._safeJson(this.getAttribute("quickLinksJson"), []);
       this._layout = this._safeJson(this.getAttribute("layoutJson"), this._defaultLayout());
 
-      this._pageKey = this.getAttribute("pageKey") || "ADMIN";
+      this._activeSpace = this.getAttribute("activeSpace") || "admin";
       this._searchText = this.getAttribute("searchText") || "";
       this._viewMode = this.getAttribute("viewMode") || "grid";
       this._density = this.getAttribute("density") || "cozy";
@@ -26,11 +24,9 @@
     static get observedAttributes() {
       return [
         "configJson",
-        "statsJson",
         "themeJson",
-        "quickLinksJson",
         "layoutJson",
-        "pageKey",
+        "activeSpace",
         "searchText",
         "viewMode",
         "density",
@@ -45,11 +41,9 @@
       if (oldValue === newValue) return;
 
       if (name === "configJson") this._config = this._safeJson(newValue, this._defaultConfig());
-      if (name === "statsJson") this._stats = this._safeJson(newValue, this._defaultStats());
       if (name === "themeJson") this._theme = this._safeJson(newValue, this._defaultTheme());
-      if (name === "quickLinksJson") this._quickLinks = this._safeJson(newValue, []);
       if (name === "layoutJson") this._layout = this._safeJson(newValue, this._defaultLayout());
-      if (name === "pageKey") this._pageKey = newValue || "ADMIN";
+      if (name === "activeSpace") this._activeSpace = newValue || "admin";
       if (name === "searchText") this._searchText = newValue || "";
       if (name === "viewMode") this._viewMode = newValue || "grid";
       if (name === "density") this._density = newValue || "cozy";
@@ -63,7 +57,10 @@
 
     connectedCallback() {
       this._startClock();
-      this._fireSimpleEvent("onReady", { status: "READY", pageKey: this._pageKey });
+      this._fireSimpleEvent("onReady", {
+        status: "READY",
+        activeSpace: this._activeSpace
+      });
     }
 
     disconnectedCallback() {
@@ -75,44 +72,52 @@
 
     _defaultConfig() {
       return {
-        pageTitle: "SAP Enterprise Analytics Portal",
-        pageSubtitle: "Explore business intelligence, reports and planning insights.",
-        pageEyebrow: "SAP ANALYTICS CLOUD",
-        environment: "Production",
-        logoText: "A",
-        logoUrl: "",
-        heroBackgroundImage: "",
-        showClock: true,
-        showHero: true,
-        showSearch: true,
-        showStats: true,
-        showQuickLinksPanel: true,
-        showAnnouncement: false,
-        announcementText: "",
-        announcementType: "info",
-        showFooter: true,
-        footerText: "Developed by Arnav Choudhary",
-        allowThemeSwitch: true,
-        allowDensitySwitch: true,
-        allowViewSwitch: true,
-        sections: []
-      };
-    }
-
-    _defaultStats() {
-      return {
-        card1Label: "Modules",
-        card1Value: "0",
-        card1Icon: "grid",
-        card2Label: "Reports",
-        card2Value: "0",
-        card2Icon: "document",
-        card3Label: "Actions",
-        card3Value: "0",
-        card3Icon: "target",
-        card4Label: "Links",
-        card4Value: "0",
-        card4Icon: "link"
+        app: {
+          title: "CAPEX Planning Workspace",
+          subtitle: "Manage administration, planning, and reporting in one place.",
+          eyebrow: "SAP ANALYTICS CLOUD",
+          environment: "Production",
+          logoText: "A",
+          logoUrl: "",
+          heroBackgroundImage: "",
+          showClock: true,
+          showHero: true,
+          showSearch: true,
+          showStats: true,
+          showQuickLinksPanel: true,
+          showAnnouncement: true,
+          announcementText: "Use the space switcher to navigate between Admin, Actual + Estimate, and Budget.",
+          showFooter: true,
+          footerText: "Developed by Arnav Choudhary",
+          allowThemeSwitch: true,
+          allowDensitySwitch: true,
+          allowViewSwitch: true
+        },
+        quickLinks: [],
+        spaces: [
+          {
+            id: "admin",
+            label: "Admin",
+            icon: "grid",
+            title: "CAPEX PLANNING - ADMIN COCKPIT",
+            subtitle: "Manage loads, derivations, and versions",
+            stats: {
+              card1Label: "Modules",
+              card1Value: "3",
+              card1Icon: "grid",
+              card2Label: "Stories",
+              card2Value: "6",
+              card2Icon: "document",
+              card3Label: "Actions",
+              card3Value: "6",
+              card3Icon: "target",
+              card4Label: "Links",
+              card4Value: "4",
+              card4Icon: "link"
+            },
+            sections: []
+          }
+        ]
       };
     }
 
@@ -156,11 +161,9 @@
         detail: {
           properties: {
             configJson: JSON.stringify(this._config),
-            statsJson: JSON.stringify(this._stats),
             themeJson: JSON.stringify(this._theme),
-            quickLinksJson: JSON.stringify(this._quickLinks),
             layoutJson: JSON.stringify(this._layout),
-            pageKey: this._pageKey,
+            activeSpace: this._activeSpace,
             searchText: this._searchText,
             viewMode: this._viewMode,
             density: this._density,
@@ -183,7 +186,7 @@
     }
 
     _startClock() {
-      if (!this._config.showClock) return;
+      if (!this._config.app || !this._config.app.showClock) return;
       if (this._clockTimer) clearInterval(this._clockTimer);
 
       this._clockTimer = setInterval(() => {
@@ -216,7 +219,6 @@
         document: `<svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7z" stroke="currentColor" stroke-width="2"/><path d="M14 3v6h6" stroke="currentColor" stroke-width="2"/><path d="M10 13h6M10 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
         upload: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 16V5M8 9l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
         refresh: `<svg viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 1 1-2.34-5.66" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-        star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.5l2.8 5.67 6.26.91-4.53 4.42 1.07 6.25L12 17.77l-5.6 2.98 1.07-6.25L2.94 10.08l6.26-.91L12 3.5z"/></svg>`,
         clock: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
         grid: `<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="6" stroke="currentColor" stroke-width="2"/><rect x="14" y="4" width="6" height="6" stroke="currentColor" stroke-width="2"/><rect x="4" y="14" width="6" height="6" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="6" height="6" stroke="currentColor" stroke-width="2"/></svg>`,
         list: `<svg viewBox="0 0 24 24" fill="none"><path d="M8 7h12M8 12h12M8 17h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="4" cy="7" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="17" r="1.5" fill="currentColor"/></svg>`,
@@ -227,102 +229,158 @@
       return icons[name] || icons.document;
     }
 
-    _normalizeString(v) {
-      return String(v || "").trim();
+    _escapeHtml(v) {
+      return String(v || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
     }
 
-    _matchesSearch(tile, searchText) {
-      const q = this._normalizeString(searchText).toLowerCase();
+    _escapeAttr(v) {
+      return this._escapeHtml(v);
+    }
+
+    _getActiveSpace() {
+      const spaces = Array.isArray(this._config.spaces) ? this._config.spaces : [];
+      for (let i = 0; i < spaces.length; i++) {
+        if (spaces[i].id === this._activeSpace) return spaces[i];
+      }
+      return spaces.length ? spaces[0] : { id: "default", label: "Default", title: "", subtitle: "", sections: [], stats: {} };
+    }
+
+    _matchesSearch(tile) {
+      const q = String(this._searchText || "").trim().toLowerCase();
       if (!q) return true;
 
       const bucket = [
         tile.title,
         tile.subtitle,
         tile.target,
-        (tile.tags || []).join(" "),
-        tile.type
+        tile.type,
+        (tile.tags || []).join(" ")
       ].join(" ").toLowerCase();
 
       return bucket.indexOf(q) !== -1;
     }
 
     _getVisibleSections() {
-      const sections = Array.isArray(this._config.sections) ? this._config.sections : [];
-      const searchText = this._searchText || "";
+      const space = this._getActiveSpace();
+      const sections = Array.isArray(space.sections) ? space.sections : [];
 
       return sections
         .map(section => {
           const tiles = Array.isArray(section.tiles) ? section.tiles : [];
-          const filteredTiles = tiles.filter(tile => this._matchesSearch(tile, searchText));
+          const filteredTiles = tiles.filter(tile => this._matchesSearch(tile));
           return Object.assign({}, section, { tiles: filteredTiles });
         })
-        .filter(section => section.tiles.length > 0 || !searchText);
+        .filter(section => section.tiles.length > 0 || !this._searchText);
+    }
+
+    _themeVars() {
+      const dark = this._themeMode === "dark";
+      return {
+        bg: dark ? "#0b1220" : (this._theme.background || "#eef4fb"),
+        surface: dark ? "#111a2e" : (this._theme.surface || "#ffffff"),
+        text: dark ? "#ecf3ff" : (this._theme.text || "#12304f"),
+        muted: dark ? "#9db0c9" : (this._theme.muted || "#6b7c93"),
+        border: dark ? "#24324d" : (this._theme.border || "#d9e6f2"),
+        primary: this._theme.primary || "#0f4c97",
+        secondary: this._theme.secondary || "#3b82f6",
+        accent: this._theme.accent || "#60a5fa",
+        heroText: this._theme.heroText || "#ffffff"
+      };
+    }
+
+    _heroBackground(t) {
+      if (this._config.app && this._config.app.heroBackgroundImage) {
+        return `linear-gradient(rgba(15,76,151,0.72), rgba(59,130,246,0.72)), url('${this._config.app.heroBackgroundImage}') center/cover no-repeat`;
+      }
+      return `linear-gradient(135deg, ${t.primary} 0%, ${t.secondary} 100%)`;
     }
 
     _handleTileClick(tile) {
-      if (tile.disabled) return;
-
       this._selectedTile = tile.id || "";
       this._widgetState = "NAVIGATE_READY";
       this._setLastEvent({
         type: "tileClick",
-        pageKey: this._pageKey,
-        tileId: tile.id,
-        title: tile.title,
-        target: tile.target,
+        activeSpace: this._activeSpace,
+        tileId: tile.id || "",
+        title: tile.title || "",
+        target: tile.target || "",
         targetType: tile.targetType || tile.type || "story",
         openMode: tile.openMode || "same_tab"
       });
 
       this._fireSimpleEvent("onTileClick", {
-        pageKey: this._pageKey,
-        tileId: tile.id,
-        title: tile.title,
-        target: tile.target,
-        targetType: tile.targetType || tile.type || "story",
-        openMode: tile.openMode || "same_tab",
+        activeSpace: this._activeSpace,
         tile: tile
       });
-
-      this._render();
     }
 
-    _handleQuickLinkClick(link) {
+    _handleQuickLinkClick(item) {
       this._setLastEvent({
         type: "quickLinkClick",
-        pageKey: this._pageKey,
-        id: link.id,
-        title: link.title,
-        target: link.target,
-        targetType: link.targetType || "url"
+        activeSpace: this._activeSpace,
+        id: item.id || "",
+        title: item.title || "",
+        target: item.target || "",
+        targetType: item.targetType || "story"
       });
 
       this._fireSimpleEvent("onQuickLinkClick", {
-        pageKey: this._pageKey,
-        item: link
+        activeSpace: this._activeSpace,
+        item: item
       });
     }
 
+    _switchSpace(spaceId) {
+      this._activeSpace = spaceId;
+      this._widgetState = "SPACE_CHANGED";
+      this._setLastEvent({
+        type: "spaceChange",
+        activeSpace: this._activeSpace
+      });
+      this._fireSimpleEvent("onSpaceChange", {
+        activeSpace: this._activeSpace
+      });
+      this._render();
+    }
+
     _toggleSection(sectionId) {
-      const sections = this._config.sections || [];
+      const space = this._getActiveSpace();
+      const sections = space.sections || [];
       for (let i = 0; i < sections.length; i++) {
         if (sections[i].id === sectionId) {
           sections[i].collapsed = !sections[i].collapsed;
           break;
         }
       }
-
-      this._widgetState = "SECTION_TOGGLED";
-      this._setLastEvent({ type: "sectionToggle", sectionId: sectionId, pageKey: this._pageKey });
-      this._fireSimpleEvent("onSectionToggle", { sectionId: sectionId, pageKey: this._pageKey });
+      this._setLastEvent({
+        type: "sectionToggle",
+        activeSpace: this._activeSpace,
+        sectionId: sectionId
+      });
+      this._fireSimpleEvent("onSectionToggle", {
+        activeSpace: this._activeSpace,
+        sectionId: sectionId
+      });
       this._render();
     }
 
     _setSearch(value) {
       this._searchText = value || "";
       this._widgetState = "FILTERED";
-      this._setLastEvent({ type: "search", value: this._searchText, pageKey: this._pageKey });
-      this._fireSimpleEvent("onSearch", { value: this._searchText, pageKey: this._pageKey });
+      this._setLastEvent({
+        type: "search",
+        activeSpace: this._activeSpace,
+        value: this._searchText
+      });
+      this._fireSimpleEvent("onSearch", {
+        activeSpace: this._activeSpace,
+        value: this._searchText
+      });
       this._render();
     }
 
@@ -344,44 +402,15 @@
       this._render();
     }
 
-    _countAllVisibleTiles() {
-      const sections = this._getVisibleSections();
-      let count = 0;
-      for (let i = 0; i < sections.length; i++) {
-        count += (sections[i].tiles || []).length;
-      }
-      return count;
-    }
-
-    _themeVars() {
-      const dark = this._themeMode === "dark";
-      return {
-        bg: dark ? "#0b1220" : (this._theme.background || "#eef4fb"),
-        surface: dark ? "#111a2e" : (this._theme.surface || "#ffffff"),
-        text: dark ? "#ecf3ff" : (this._theme.text || "#12304f"),
-        muted: dark ? "#9db0c9" : (this._theme.muted || "#6b7c93"),
-        border: dark ? "#24324d" : (this._theme.border || "#d9e6f2"),
-        primary: this._theme.primary || "#0f4c97",
-        secondary: this._theme.secondary || "#3b82f6",
-        accent: this._theme.accent || "#60a5fa",
-        heroText: this._theme.heroText || "#ffffff"
-      };
-    }
-
-    _heroBackground(t) {
-      if (this._config.heroBackgroundImage) {
-        return `linear-gradient(rgba(15,76,151,0.72), rgba(59,130,246,0.72)), url('${this._config.heroBackgroundImage}') center/cover no-repeat`;
-      }
-      return `linear-gradient(135deg, ${t.primary} 0%, ${t.secondary} 100%)`;
-    }
-
     _render() {
       const t = this._themeVars();
+      const app = this._config.app || {};
+      const space = this._getActiveSpace();
       const visibleSections = this._getVisibleSections();
-      const totalSections = visibleSections.length;
-      const totalTiles = this._countAllVisibleTiles();
       const densityClass = this._density === "compact" ? "compact" : "cozy";
       const viewClass = this._viewMode === "list" ? "list" : "grid";
+      const stats = space.stats || {};
+      const spaces = Array.isArray(this._config.spaces) ? this._config.spaces : [];
 
       this._shadowRoot.innerHTML = `
         <style>
@@ -420,8 +449,8 @@
             align-items:flex-start;
           }
           .logo{
-            width:54px;
-            height:54px;
+            width:56px;
+            height:56px;
             border-radius:14px;
             background:rgba(255,255,255,0.12);
             display:flex;
@@ -468,8 +497,32 @@
             font-weight:700;
             white-space:nowrap;
           }
+          .space-switcher{
+            margin-top:16px;
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+          }
+          .space-btn{
+            border:1px solid ${t.border};
+            background:${t.surface};
+            color:${t.text};
+            border-radius:999px;
+            padding:10px 14px;
+            font-size:13px;
+            font-weight:800;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:8px;
+          }
+          .space-btn.active{
+            background:${t.primary};
+            border-color:${t.primary};
+            color:#fff;
+          }
           .announcement{
-            margin-top:14px;
+            margin-top:16px;
             padding:12px 16px;
             border-radius:14px;
             border:1px solid ${t.border};
@@ -481,7 +534,7 @@
           .toolbar{
             margin-top:18px;
             display:grid;
-            grid-template-columns:${this._config.showQuickLinksPanel ? "1fr 320px auto" : "1fr auto"};
+            grid-template-columns:${app.showQuickLinksPanel !== false ? "1fr 320px auto" : "1fr auto"};
             gap:14px;
             align-items:start;
           }
@@ -547,9 +600,25 @@
             cursor:pointer;
             font-weight:700;
           }
-          .tool-btn svg,.icon svg,.kpi-icon svg,.mini-icon svg,.quick-link svg{
+          .tool-btn svg,.icon svg,.kpi-icon svg,.mini-icon svg,.quick-link svg,.space-btn svg{
             width:18px;
             height:18px;
+          }
+          .space-header{
+            margin-top:18px;
+            background:${t.surface};
+            border:1px solid ${t.border};
+            border-radius:${parseInt(this._layout.sectionRadius || 20, 10)}px;
+            padding:16px;
+          }
+          .space-title{
+            font-size:24px;
+            font-weight:800;
+          }
+          .space-subtitle{
+            margin-top:6px;
+            color:${t.muted};
+            font-size:14px;
           }
           .stats{
             margin-top:18px;
@@ -667,16 +736,6 @@
             min-height:${Math.max(100, parseInt(this._layout.tileMinHeight || 140, 10) - 28)}px;
             padding:12px;
           }
-          .tile.disabled{
-            opacity:.55;
-            cursor:not-allowed;
-          }
-          .tile-top{
-            display:flex;
-            justify-content:space-between;
-            align-items:flex-start;
-            gap:12px;
-          }
           .icon{
             width:52px;
             height:52px;
@@ -754,41 +813,50 @@
 
         <div class="app">
           <div class="shell">
-            ${this._config.showHero !== false ? `
+            ${app.showHero !== false ? `
               <div class="hero">
                 <div class="hero-left">
                   <div class="logo">
-                    ${this._config.logoUrl ? `<img src="${this._escapeAttr(this._config.logoUrl)}" alt="logo" />` : this._escapeHtml(this._config.logoText || "A")}
+                    ${app.logoUrl ? `<img src="${this._escapeAttr(app.logoUrl)}" alt="logo" />` : this._escapeHtml(app.logoText || "A")}
                   </div>
                   <div>
-                    <div class="eyebrow">${this._escapeHtml(this._config.pageEyebrow || "SAP ANALYTICS CLOUD")}</div>
-                    <div class="title">${this._escapeHtml(this._config.pageTitle || "")}</div>
-                    <div class="subtitle">${this._escapeHtml(this._config.pageSubtitle || "")}</div>
+                    <div class="eyebrow">${this._escapeHtml(app.eyebrow || "SAP ANALYTICS CLOUD")}</div>
+                    <div class="title">${this._escapeHtml(app.title || "")}</div>
+                    <div class="subtitle">${this._escapeHtml(app.subtitle || "")}</div>
                   </div>
                 </div>
                 <div class="hero-right">
-                  <div class="chip">${this._escapeHtml(this._config.environment || "Production")}</div>
-                  ${this._config.showClock ? `<div class="chip"><span id="liveClock">${this._formatDateTime(new Date())}</span></div>` : ``}
+                  <div class="chip">${this._escapeHtml(app.environment || "Production")}</div>
+                  ${app.showClock ? `<div class="chip"><span id="liveClock">${this._formatDateTime(new Date())}</span></div>` : ``}
                 </div>
               </div>
             ` : ``}
 
-            ${this._config.showAnnouncement && this._config.announcementText ? `
-              <div class="announcement">${this._escapeHtml(this._config.announcementText)}</div>
+            <div class="space-switcher">
+              ${spaces.map(spaceItem => `
+                <button class="space-btn ${spaceItem.id === this._activeSpace ? "active" : ""}" data-space-id="${this._escapeAttr(spaceItem.id)}">
+                  ${this._getIconSvg(spaceItem.icon || "grid")}
+                  ${this._escapeHtml(spaceItem.label || spaceItem.id)}
+                </button>
+              `).join("")}
+            </div>
+
+            ${app.showAnnouncement && app.announcementText ? `
+              <div class="announcement">${this._escapeHtml(app.announcementText)}</div>
             ` : ``}
 
             <div class="toolbar">
-              ${this._config.showSearch !== false ? `
+              ${app.showSearch !== false ? `
                 <div class="searchbox">
                   <span class="mini-icon">${this._getIconSvg("search")}</span>
-                  <input id="searchInput" type="text" placeholder="Search modules, reports, stories, actions" value="${this._escapeAttr(this._searchText)}" />
+                  <input id="searchInput" type="text" placeholder="Search across current space" value="${this._escapeAttr(this._searchText)}" />
                 </div>
               ` : `<div></div>`}
 
-              ${this._config.showQuickLinksPanel !== false ? `
+              ${app.showQuickLinksPanel !== false ? `
                 <div class="quick-links">
                   <div class="quick-links-title">Quick Links</div>
-                  ${(this._quickLinks || []).map(link => `
+                  ${(this._config.quickLinks || []).map(link => `
                     <div class="quick-link" data-quick-id="${this._escapeAttr(link.id || "")}">
                       <span>${this._escapeHtml(link.title || "")}</span>
                       <span>${this._getIconSvg(link.icon || "link")}</span>
@@ -798,38 +866,41 @@
               ` : ``}
 
               <div class="tools">
-                ${this._config.allowViewSwitch !== false ? `<button class="tool-btn" id="viewBtn">${this._getIconSvg(this._viewMode === "grid" ? "grid" : "list")} ${this._viewMode}</button>` : ``}
-                ${this._config.allowDensitySwitch !== false ? `<button class="tool-btn" id="densityBtn">${this._density}</button>` : ``}
-                ${this._config.allowThemeSwitch !== false ? `<button class="tool-btn" id="themeBtn">${this._themeMode}</button>` : ``}
+                ${app.allowViewSwitch !== false ? `<button class="tool-btn" id="viewBtn">${this._getIconSvg(this._viewMode === "grid" ? "grid" : "list")} ${this._viewMode}</button>` : ``}
+                ${app.allowDensitySwitch !== false ? `<button class="tool-btn" id="densityBtn">${this._density}</button>` : ``}
+                ${app.allowThemeSwitch !== false ? `<button class="tool-btn" id="themeBtn">${this._themeMode}</button>` : ``}
               </div>
             </div>
 
-            ${this._config.showStats !== false ? `
+            <div class="space-header">
+              <div class="space-title">${this._escapeHtml(space.title || "")}</div>
+              <div class="space-subtitle">${this._escapeHtml(space.subtitle || "")}</div>
+            </div>
+
+            ${app.showStats !== false ? `
               <div class="stats">
                 <div class="kpi">
-                  <div class="kpi-icon">${this._getIconSvg(this._stats.card1Icon || "grid")}</div>
-                  <div><div class="kpi-label">${this._escapeHtml(this._stats.card1Label || "Modules")}</div><div class="kpi-value">${this._escapeHtml(this._stats.card1Value || String(totalSections))}</div></div>
+                  <div class="kpi-icon">${this._getIconSvg(stats.card1Icon || "grid")}</div>
+                  <div><div class="kpi-label">${this._escapeHtml(stats.card1Label || "Modules")}</div><div class="kpi-value">${this._escapeHtml(stats.card1Value || "0")}</div></div>
                 </div>
                 <div class="kpi">
-                  <div class="kpi-icon">${this._getIconSvg(this._stats.card2Icon || "document")}</div>
-                  <div><div class="kpi-label">${this._escapeHtml(this._stats.card2Label || "Reports")}</div><div class="kpi-value">${this._escapeHtml(this._stats.card2Value || String(totalTiles))}</div></div>
+                  <div class="kpi-icon">${this._getIconSvg(stats.card2Icon || "document")}</div>
+                  <div><div class="kpi-label">${this._escapeHtml(stats.card2Label || "Reports")}</div><div class="kpi-value">${this._escapeHtml(stats.card2Value || "0")}</div></div>
                 </div>
                 <div class="kpi">
-                  <div class="kpi-icon">${this._getIconSvg(this._stats.card3Icon || "target")}</div>
-                  <div><div class="kpi-label">${this._escapeHtml(this._stats.card3Label || "Actions")}</div><div class="kpi-value">${this._escapeHtml(this._stats.card3Value || "0")}</div></div>
+                  <div class="kpi-icon">${this._getIconSvg(stats.card3Icon || "target")}</div>
+                  <div><div class="kpi-label">${this._escapeHtml(stats.card3Label || "Actions")}</div><div class="kpi-value">${this._escapeHtml(stats.card3Value || "0")}</div></div>
                 </div>
                 <div class="kpi">
-                  <div class="kpi-icon">${this._getIconSvg(this._stats.card4Icon || "link")}</div>
-                  <div><div class="kpi-label">${this._escapeHtml(this._stats.card4Label || "Links")}</div><div class="kpi-value">${this._escapeHtml(this._stats.card4Value || "0")}</div></div>
+                  <div class="kpi-icon">${this._getIconSvg(stats.card4Icon || "link")}</div>
+                  <div><div class="kpi-label">${this._escapeHtml(stats.card4Label || "Links")}</div><div class="kpi-value">${this._escapeHtml(stats.card4Value || "0")}</div></div>
                 </div>
               </div>
             ` : ``}
 
             <div class="content">
               ${visibleSections.length === 0 ? `
-                <div class="empty">
-                  No tiles configured for this landing page.
-                </div>
+                <div class="empty">No tiles configured for this space.</div>
               ` : visibleSections.map(section => `
                 <div class="section">
                   <div class="section-head">
@@ -847,11 +918,9 @@
                   ${section.collapsed ? "" : `
                     <div class="tiles ${viewClass}">
                       ${(section.tiles || []).map(tile => `
-                        <div class="tile ${densityClass} ${tile.disabled ? "disabled" : ""}" data-tile-id="${this._escapeAttr(tile.id)}">
-                          <div class="tile-top">
-                            <div class="icon" style="background:${this._escapeAttr(tile.accent || t.secondary)}">
-                              ${this._getIconSvg(tile.icon || "document")}
-                            </div>
+                        <div class="tile ${densityClass}" data-tile-id="${this._escapeAttr(tile.id)}">
+                          <div class="icon" style="background:${this._escapeAttr(tile.accent || t.secondary)}">
+                            ${this._getIconSvg(tile.icon || "document")}
                           </div>
                           <div class="tile-title">${this._escapeHtml(tile.title || "")}</div>
                           <div class="tile-subtitle">${this._escapeHtml(tile.subtitle || "")}</div>
@@ -867,10 +936,8 @@
               `).join("")}
             </div>
 
-            ${this._config.showFooter !== false ? `
-              <div class="footer-note">
-                ${this._escapeHtml(this._config.footerText || "Developed by Arnav Choudhary")}
-              </div>
+            ${app.showFooter !== false ? `
+              <div class="footer-note">${this._escapeHtml(app.footerText || "Developed by Arnav Choudhary")}</div>
             ` : ``}
           </div>
         </div>
@@ -909,6 +976,12 @@
         });
       }
 
+      this._shadowRoot.querySelectorAll("[data-space-id]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          this._switchSpace(btn.getAttribute("data-space-id"));
+        });
+      });
+
       this._shadowRoot.querySelectorAll("[data-section-toggle]").forEach(btn => {
         btn.addEventListener("click", () => {
           this._toggleSection(btn.getAttribute("data-section-toggle"));
@@ -934,9 +1007,10 @@
       this._shadowRoot.querySelectorAll("[data-quick-id]").forEach(el => {
         el.addEventListener("click", () => {
           const id = el.getAttribute("data-quick-id");
-          for (let i = 0; i < this._quickLinks.length; i++) {
-            if ((this._quickLinks[i].id || "") === id) {
-              this._handleQuickLinkClick(this._quickLinks[i]);
+          const items = this._config.quickLinks || [];
+          for (let i = 0; i < items.length; i++) {
+            if ((items[i].id || "") === id) {
+              this._handleQuickLinkClick(items[i]);
               return;
             }
           }
@@ -944,35 +1018,16 @@
       });
     }
 
-    _escapeHtml(v) {
-      return String(v || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    _escapeAttr(v) {
-      return this._escapeHtml(v);
-    }
-
     setConfig(json) {
       this._config = this._safeJson(json, this._defaultConfig());
       this._widgetState = "CONFIG_UPDATED";
       this._syncAll();
-      this._fireSimpleEvent("onConfigChange", { config: this._config, pageKey: this._pageKey });
+      this._fireSimpleEvent("onConfigChange", { config: this._config });
       this._render();
     }
 
     getConfig() {
       return JSON.stringify(this._config || {});
-    }
-
-    setStats(json) {
-      this._stats = this._safeJson(json, this._defaultStats());
-      this._syncAll();
-      this._render();
     }
 
     setTheme(json) {
@@ -981,16 +1036,14 @@
       this._render();
     }
 
-    setQuickLinks(json) {
-      this._quickLinks = this._safeJson(json, []);
-      this._syncAll();
-      this._render();
-    }
-
     setLayout(json) {
       this._layout = this._safeJson(json, this._defaultLayout());
       this._syncAll();
       this._render();
+    }
+
+    setActiveSpace(value) {
+      this._switchSpace(value || "admin");
     }
 
     setSearchText(value) {
@@ -1007,12 +1060,6 @@
 
     setThemeMode(value) {
       this._setThemeMode(value || "light");
-    }
-
-    setPageKey(value) {
-      this._pageKey = value || "ADMIN";
-      this._syncAll();
-      this._render();
     }
 
     refresh() {
