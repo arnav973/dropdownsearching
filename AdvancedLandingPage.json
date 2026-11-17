@@ -1,0 +1,163 @@
+{
+  "id": "com.company.sac.advancedlandingpage",
+  "version": "1.0.0",
+  "name": "Advanced SAC Landing Page",
+  "description": "Premium frontend-driven landing page widget for SAP Analytics Cloud planning stories",
+  "vendor": "NTT",
+  "newInstancePrefix": "AdvancedLandingPage",
+  "icon": "sap-icon://home",
+  "webcomponents": [
+    {
+      "kind": "main",
+      "tag": "com-company-sac-advancedlandingpage",
+      "url": "https://arnav973.github.io/dropdownsearching/advancedlandingpage.js",
+      "integrity": "",
+      "ignoreIntegrity": true
+    }
+  ],
+  "properties": {
+    "configJson": {
+      "type": "string",
+      "default": "{\"appTitle\":\"SAP Enterprise Analytics Portal\",\"appSubtitle\":\"Explore business intelligence, reports and planning insights.\",\"environment\":\"Production\",\"logoText\":\"A\",\"heroStyle\":\"blue\",\"showClock\":true,\"allowFavorites\":true,\"allowRecent\":true,\"allowSearch\":true,\"allowThemeSwitch\":true,\"allowDensitySwitch\":true,\"allowViewSwitch\":true,\"maxRecent\":8,\"sections\":[{\"id\":\"datasource\",\"title\":\"DataSource\",\"icon\":\"database\",\"collapsed\":false,\"tiles\":[{\"id\":\"asset_balance_detailed\",\"title\":\"Asset Balance Detailed\",\"subtitle\":\"Open datasource story\",\"icon\":\"database\",\"type\":\"story\",\"target\":\"AHCP_CAPEX_DATASOURCE_DETAIL\",\"accent\":\"#2563eb\",\"roles\":[\"ALL\"],\"tags\":[\"datasource\",\"asset\",\"balance\"],\"favorite\":false,\"disabled\":false},{\"id\":\"asset_balance_summary\",\"title\":\"Asset Balance Summary\",\"subtitle\":\"Open summary datasource\",\"icon\":\"database\",\"type\":\"story\",\"target\":\"AHCP_CAPEX_DATASOURCE_SUMMARY\",\"accent\":\"#0ea5e9\",\"roles\":[\"ALL\"],\"tags\":[\"datasource\",\"summary\"],\"favorite\":false,\"disabled\":false}]},{\"id\":\"planning\",\"title\":\"New Asset Planning\",\"icon\":\"target\",\"collapsed\":false,\"tiles\":[{\"id\":\"create_asset\",\"title\":\"Create New Asset\",\"subtitle\":\"Create planning request\",\"icon\":\"target\",\"type\":\"story\",\"target\":\"CREATE_NEW_ASSET\",\"accent\":\"#2563eb\",\"roles\":[\"PLANNER\",\"ADMIN\",\"ALL\"],\"tags\":[\"create\",\"asset\",\"planning\"],\"favorite\":true,\"disabled\":false},{\"id\":\"upload_asset\",\"title\":\"Upload New Assets\",\"subtitle\":\"Mass load planning assets\",\"icon\":\"upload\",\"type\":\"story\",\"target\":\"UPLOAD_NEW_ASSETS\",\"accent\":\"#06b6d4\",\"roles\":[\"PLANNER\",\"ADMIN\"],\"tags\":[\"upload\",\"mass\",\"planning\"],\"favorite\":false,\"disabled\":false},{\"id\":\"adjust_useful_life\",\"title\":\"Adjust Useful Life\",\"subtitle\":\"Update useful life assumptions\",\"icon\":\"refresh\",\"type\":\"story\",\"target\":\"ADJUST_USEFUL_LIFE\",\"accent\":\"#8b5cf6\",\"roles\":[\"PLANNER\",\"ADMIN\"],\"tags\":[\"useful life\",\"planning\"],\"favorite\":false,\"disabled\":false}]},{\"id\":\"reports\",\"title\":\"Reports\",\"icon\":\"document\",\"collapsed\":false,\"tiles\":[{\"id\":\"capex_spend_review\",\"title\":\"Capex Spend Review\",\"subtitle\":\"Open analytical report\",\"icon\":\"document\",\"type\":\"story\",\"target\":\"CAPEX_SPEND_REVIEW\",\"accent\":\"#f59e0b\",\"roles\":[\"ALL\"],\"tags\":[\"report\",\"capex\",\"spend\"],\"favorite\":true,\"disabled\":false},{\"id\":\"comparison_report\",\"title\":\"Comparison Report\",\"subtitle\":\"Compare plan vs actual\",\"icon\":\"document\",\"type\":\"story\",\"target\":\"COMPARISON_REPORT\",\"accent\":\"#ef4444\",\"roles\":[\"ALL\"],\"tags\":[\"report\",\"comparison\"],\"favorite\":false,\"disabled\":false}]}]}"
+    },
+    "userJson": {
+      "type": "string",
+      "default": "{\"id\":\"guest\",\"name\":\"Guest User\",\"role\":\"ALL\",\"email\":\"\",\"avatarText\":\"GU\"}"
+    },
+    "statsJson": {
+      "type": "string",
+      "default": "{\"modules\":0,\"reports\":0,\"favorites\":0,\"recent\":0}"
+    },
+    "themeJson": {
+      "type": "string",
+      "default": "{\"primary\":\"#0f4c97\",\"secondary\":\"#3b82f6\",\"accent\":\"#60a5fa\",\"surface\":\"#ffffff\",\"background\":\"#eef4fb\",\"text\":\"#12304f\",\"muted\":\"#6b7c93\",\"border\":\"#d9e6f2\",\"heroText\":\"#ffffff\"}"
+    },
+    "favoritesJson": {
+      "type": "string",
+      "default": "[]"
+    },
+    "recentJson": {
+      "type": "string",
+      "default": "[]"
+    },
+    "permissionsJson": {
+      "type": "string",
+      "default": "{\"roles\":[\"ALL\"],\"hiddenTiles\":[]}"
+    },
+    "searchText": {
+      "type": "string",
+      "default": ""
+    },
+    "viewMode": {
+      "type": "string",
+      "default": "grid"
+    },
+    "density": {
+      "type": "string",
+      "default": "cozy"
+    },
+    "themeMode": {
+      "type": "string",
+      "default": "light"
+    },
+    "selectedTile": {
+      "type": "string",
+      "default": ""
+    },
+    "lastEvent": {
+      "type": "string",
+      "default": ""
+    },
+    "widgetState": {
+      "type": "string",
+      "default": "READY"
+    }
+  },
+  "methods": {
+    "setConfig": {
+      "description": "Set full landing page configuration JSON",
+      "parameters": [
+        { "name": "json", "type": "string" }
+      ]
+    },
+    "getConfig": {
+      "returnType": "string"
+    },
+    "setUser": {
+      "description": "Set user profile JSON",
+      "parameters": [
+        { "name": "json", "type": "string" }
+      ]
+    },
+    "setStats": {
+      "description": "Set KPI statistics JSON",
+      "parameters": [
+        { "name": "json", "type": "string" }
+      ]
+    },
+    "setTheme": {
+      "description": "Set theme token JSON",
+      "parameters": [
+        { "name": "json", "type": "string" }
+      ]
+    },
+    "setPermissions": {
+      "description": "Set permissions JSON",
+      "parameters": [
+        { "name": "json", "type": "string" }
+      ]
+    },
+    "setFavorites": {
+      "description": "Set favorites JSON",
+      "parameters": [
+        { "name": "json", "type": "string" }
+      ]
+    },
+    "setRecent": {
+      "description": "Set recent items JSON",
+      "parameters": [
+        { "name": "json", "type": "string" }
+      ]
+    },
+    "setSearchText": {
+      "parameters": [
+        { "name": "value", "type": "string" }
+      ]
+    },
+    "setViewMode": {
+      "parameters": [
+        { "name": "value", "type": "string" }
+      ]
+    },
+    "setDensity": {
+      "parameters": [
+        { "name": "value", "type": "string" }
+      ]
+    },
+    "setThemeMode": {
+      "parameters": [
+        { "name": "value", "type": "string" }
+      ]
+    },
+    "refresh": {
+      "description": "Refresh widget UI from current properties"
+    },
+    "resetPersonalization": {
+      "description": "Reset local personalization"
+    },
+    "getSelectedTile": {
+      "returnType": "string"
+    },
+    "getLastEvent": {
+      "returnType": "string"
+    }
+  },
+  "events": {
+    "onTileClick": {},
+    "onFavoriteToggle": {},
+    "onSearch": {},
+    "onSectionToggle": {},
+    "onConfigChange": {},
+    "onReady": {}
+  }
+}
