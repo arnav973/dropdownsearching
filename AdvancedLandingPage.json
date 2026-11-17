@@ -1,8 +1,8 @@
 {
   "id": "com.company.sac.advancedlandingpage",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "name": "Advanced SAC Landing Page",
-  "description": "Advanced configurable landing page widget for SAP Analytics Cloud planning stories",
+  "description": "Full packed multi-space landing page widget for SAP Analytics Cloud",
   "vendor": "NTT",
   "newInstancePrefix": "AdvancedLandingPage",
   "icon": "sap-icon://home",
@@ -16,29 +16,21 @@
     }
   ],
   "properties": {
-    "pageKey": {
-      "type": "string",
-      "default": "ADMIN"
-    },
     "configJson": {
       "type": "string",
-      "default": "{\"pageTitle\":\"CAPEX Planning Landing Page\",\"pageSubtitle\":\"Manage planning, reports, and business actions.\",\"pageEyebrow\":\"SAP ANALYTICS CLOUD\",\"environment\":\"Production\",\"logoText\":\"A\",\"logoUrl\":\"\",\"heroBackgroundImage\":\"\",\"showClock\":true,\"showHero\":true,\"showSearch\":true,\"showStats\":true,\"showQuickLinksPanel\":true,\"showAnnouncement\":false,\"announcementText\":\"\",\"announcementType\":\"info\",\"showFooter\":true,\"footerText\":\"Developed by Arnav Choudhary\",\"allowThemeSwitch\":true,\"allowDensitySwitch\":true,\"allowViewSwitch\":true,\"sections\":[{\"id\":\"datasource\",\"title\":\"DataSource\",\"subtitle\":\"Review data and balances\",\"icon\":\"database\",\"collapsed\":false,\"tiles\":[{\"id\":\"asset_balance_detailed\",\"title\":\"Asset Balance Detailed\",\"subtitle\":\"Open datasource story\",\"icon\":\"database\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"AHCP_CAPEX_DATASOURCE_DETAIL\",\"accent\":\"#2563eb\",\"tags\":[\"datasource\",\"asset\",\"balance\"],\"disabled\":false,\"actionText\":\"Open\"},{\"id\":\"asset_balance_summary\",\"title\":\"Asset Balance Summary\",\"subtitle\":\"Open summary datasource\",\"icon\":\"database\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"AHCP_CAPEX_DATASOURCE_SUMMARY\",\"accent\":\"#0ea5e9\",\"tags\":[\"datasource\",\"summary\"],\"disabled\":false,\"actionText\":\"Open\"}]},{\"id\":\"planning\",\"title\":\"New Asset Planning\",\"subtitle\":\"Maintain planning actions\",\"icon\":\"target\",\"collapsed\":false,\"tiles\":[{\"id\":\"create_asset\",\"title\":\"Create New Asset\",\"subtitle\":\"Create planning request\",\"icon\":\"target\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CREATE_NEW_ASSET\",\"accent\":\"#2563eb\",\"tags\":[\"create\",\"asset\",\"planning\"],\"disabled\":false,\"actionText\":\"Create\"},{\"id\":\"upload_asset\",\"title\":\"Upload New Assets\",\"subtitle\":\"Mass load planning assets\",\"icon\":\"upload\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"UPLOAD_NEW_ASSETS\",\"accent\":\"#06b6d4\",\"tags\":[\"upload\",\"mass\",\"planning\"],\"disabled\":false,\"actionText\":\"Upload\"},{\"id\":\"adjust_useful_life\",\"title\":\"Adjust Useful Life\",\"subtitle\":\"Update useful life assumptions\",\"icon\":\"refresh\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"ADJUST_USEFUL_LIFE\",\"accent\":\"#8b5cf6\",\"tags\":[\"useful life\",\"planning\"],\"disabled\":false,\"actionText\":\"Open\"}]},{\"id\":\"reports\",\"title\":\"Reports\",\"subtitle\":\"Open reporting stories\",\"icon\":\"document\",\"collapsed\":false,\"tiles\":[{\"id\":\"capex_spend_review\",\"title\":\"Capex Spend Review\",\"subtitle\":\"Open analytical report\",\"icon\":\"document\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CAPEX_SPEND_REVIEW\",\"accent\":\"#f59e0b\",\"tags\":[\"report\",\"capex\",\"spend\"],\"disabled\":false,\"actionText\":\"View\"},{\"id\":\"comparison_report\",\"title\":\"Comparison Report\",\"subtitle\":\"Compare plan vs actual\",\"icon\":\"document\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"COMPARISON_REPORT\",\"accent\":\"#ef4444\",\"tags\":[\"report\",\"comparison\"],\"disabled\":false,\"actionText\":\"View\"}]}]}"
-    },
-    "statsJson": {
-      "type": "string",
-      "default": "{\"card1Label\":\"Modules\",\"card1Value\":\"0\",\"card1Icon\":\"grid\",\"card2Label\":\"Reports\",\"card2Value\":\"0\",\"card2Icon\":\"document\",\"card3Label\":\"Actions\",\"card3Value\":\"0\",\"card3Icon\":\"target\",\"card4Label\":\"Links\",\"card4Value\":\"0\",\"card4Icon\":\"link\"}"
+      "default": "{\"app\":{\"title\":\"CAPEX Planning Workspace\",\"subtitle\":\"Manage administration, planning, and reporting in one place.\",\"eyebrow\":\"SAP ANALYTICS CLOUD\",\"environment\":\"Production\",\"logoText\":\"A\",\"logoUrl\":\"\",\"heroBackgroundImage\":\"\",\"showClock\":true,\"showHero\":true,\"showSearch\":true,\"showStats\":true,\"showQuickLinksPanel\":true,\"showAnnouncement\":true,\"announcementText\":\"Use the space switcher to navigate between Admin, Actual + Estimate, and Budget.\",\"showFooter\":true,\"footerText\":\"Developed by Arnav Choudhary\",\"allowThemeSwitch\":true,\"allowDensitySwitch\":true,\"allowViewSwitch\":true},\"quickLinks\":[{\"id\":\"quick_admin\",\"title\":\"Admin Cockpit\",\"target\":\"ADMIN_COCKPIT\",\"targetType\":\"story\",\"icon\":\"grid\"},{\"id\":\"quick_actual\",\"title\":\"Actual + Estimate\",\"target\":\"AHCP_CAPEX_LANDING_PAGE_A_E_V1\",\"targetType\":\"story\",\"icon\":\"document\"},{\"id\":\"quick_budget\",\"title\":\"Budget\",\"target\":\"AHCP_CAPEX_LANDING_PAGE_BUDGET_V1\",\"targetType\":\"story\",\"icon\":\"target\"},{\"id\":\"quick_manual\",\"title\":\"User Manual\",\"target\":\"USER_MANUAL\",\"targetType\":\"story\",\"icon\":\"link\"}],\"spaces\":[{\"id\":\"admin\",\"label\":\"Admin\",\"icon\":\"grid\",\"title\":\"CAPEX PLANNING - ADMIN COCKPIT\",\"subtitle\":\"Manage loads, derivations, and versions\",\"stats\":{\"card1Label\":\"Modules\",\"card1Value\":\"3\",\"card1Icon\":\"grid\",\"card2Label\":\"Stories\",\"card2Value\":\"6\",\"card2Icon\":\"document\",\"card3Label\":\"Actions\",\"card3Value\":\"6\",\"card3Icon\":\"target\",\"card4Label\":\"Links\",\"card4Value\":\"4\",\"card4Icon\":\"link\"},\"sections\":[{\"id\":\"data_loads\",\"title\":\"Data Loads\",\"subtitle\":\"Load and maintain master and transaction data\",\"icon\":\"database\",\"collapsed\":false,\"tiles\":[{\"id\":\"master_data\",\"title\":\"Master Data\",\"subtitle\":\"Load and maintain company, cost center, GL, asset class, and asset master data\",\"icon\":\"database\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"DATA_LOADS_MASTER\",\"accent\":\"#2563eb\",\"tags\":[\"master\",\"data\",\"load\",\"admin\"],\"actionText\":\"Open\"},{\"id\":\"transaction_data\",\"title\":\"Transaction Data\",\"subtitle\":\"Load transaction data for planning and reporting processes\",\"icon\":\"upload\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"DATA_LOADS_TRANSACTION\",\"accent\":\"#0ea5e9\",\"tags\":[\"transaction\",\"data\",\"load\",\"admin\"],\"actionText\":\"Open\"}]},{\"id\":\"derive_useful_life\",\"title\":\"Derive Useful Life\",\"subtitle\":\"Maintain useful life derivation processes\",\"icon\":\"refresh\",\"collapsed\":false,\"tiles\":[{\"id\":\"derive_useful_life_actual_estimate\",\"title\":\"Derive Useful Life - Actual + Estimate\",\"subtitle\":\"Run or maintain derivation for actual and estimate scenarios\",\"icon\":\"refresh\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"DERIVE_USEFUL_LIFE_AE\",\"accent\":\"#8b5cf6\",\"tags\":[\"useful life\",\"actual\",\"estimate\",\"derive\"],\"actionText\":\"Open\"},{\"id\":\"derive_useful_life_budget\",\"title\":\"Derive Useful Life - Budget\",\"subtitle\":\"Run or maintain derivation for budget scenarios\",\"icon\":\"refresh\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"DERIVE_USEFUL_LIFE_BUDGET\",\"accent\":\"#7c3aed\",\"tags\":[\"useful life\",\"budget\",\"derive\"],\"actionText\":\"Open\"}]},{\"id\":\"version_management\",\"title\":\"Version Management\",\"subtitle\":\"Manage planning versions and future references\",\"icon\":\"target\",\"collapsed\":false,\"tiles\":[{\"id\":\"create_new_version\",\"title\":\"Create New Version\",\"subtitle\":\"Create and initialize a new planning version\",\"icon\":\"target\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CREATE_NEW_VERSION\",\"accent\":\"#f59e0b\",\"tags\":[\"version\",\"create\",\"admin\"],\"actionText\":\"Create\"},{\"id\":\"future_reference\",\"title\":\"Future Reference\",\"subtitle\":\"Maintain future reference and setup configurations\",\"icon\":\"database\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"FUTURE_REFERENCE\",\"accent\":\"#14b8a6\",\"tags\":[\"future\",\"reference\",\"admin\"],\"actionText\":\"Open\"}]}]},{\"id\":\"actual_estimate\",\"label\":\"Actual + Estimate\",\"icon\":\"document\",\"title\":\"CAPEX PLANNING - ACTUAL + ESTIMATES\",\"subtitle\":\"Access source data, planning actions, transfers, disposals, and reports\",\"stats\":{\"card1Label\":\"Modules\",\"card1Value\":\"4\",\"card1Icon\":\"grid\",\"card2Label\":\"Reports\",\"card2Value\":\"4\",\"card2Icon\":\"document\",\"card3Label\":\"Actions\",\"card3Value\":\"11\",\"card3Icon\":\"target\",\"card4Label\":\"Links\",\"card4Value\":\"4\",\"card4Icon\":\"link\"},\"sections\":[{\"id\":\"datasource\",\"title\":\"DataSource\",\"subtitle\":\"Review asset balance source data\",\"icon\":\"database\",\"collapsed\":false,\"tiles\":[{\"id\":\"asset_balance_detailed\",\"title\":\"Asset Balance Detailed\",\"subtitle\":\"Detailed datasource review for asset balances\",\"icon\":\"database\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"ASSET_BALANCE_DETAILED\",\"accent\":\"#2563eb\",\"tags\":[\"datasource\",\"asset\",\"detailed\",\"balance\"],\"actionText\":\"Open\"},{\"id\":\"asset_balance_summary\",\"title\":\"Asset Balance Summary\",\"subtitle\":\"Summary datasource review for asset balances\",\"icon\":\"database\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"ASSET_BALANCE_SUMMARY\",\"accent\":\"#0ea5e9\",\"tags\":[\"datasource\",\"asset\",\"summary\",\"balance\"],\"actionText\":\"Open\"}]},{\"id\":\"new_asset_planning\",\"title\":\"New Asset Planning\",\"subtitle\":\"Plan and maintain asset creation scenarios\",\"icon\":\"target\",\"collapsed\":false,\"tiles\":[{\"id\":\"create_new_asset\",\"title\":\"Create New Asset\",\"subtitle\":\"Create a new asset planning request\",\"icon\":\"target\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CREATE_NEW_ASSET\",\"accent\":\"#2563eb\",\"tags\":[\"create\",\"new asset\",\"planning\"],\"actionText\":\"Create\"},{\"id\":\"upload_new_assets\",\"title\":\"Upload New Assets\",\"subtitle\":\"Bulk upload new assets into planning\",\"icon\":\"upload\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"UPLOAD_NEW_ASSETS\",\"accent\":\"#06b6d4\",\"tags\":[\"upload\",\"new assets\",\"planning\"],\"actionText\":\"Upload\"},{\"id\":\"adjust_useful_life\",\"title\":\"Adjust Useful Life\",\"subtitle\":\"Update useful life assumptions for planned assets\",\"icon\":\"refresh\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"ADJUST_USEFUL_LIFE\",\"accent\":\"#8b5cf6\",\"tags\":[\"adjust\",\"useful life\",\"planning\"],\"actionText\":\"Open\"},{\"id\":\"plan_new_asset_acquisition\",\"title\":\"Plan New Asset Acquisition\",\"subtitle\":\"Maintain planned asset acquisition entries\",\"icon\":\"target\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"PLAN_NEW_ASSET_ACQUISITION\",\"accent\":\"#f59e0b\",\"tags\":[\"plan\",\"acquisition\",\"asset\"],\"actionText\":\"Open\"}]},{\"id\":\"cwip_transfer_disposals\",\"title\":\"CWIP Transfer & Disposals\",\"subtitle\":\"Transfer, update, dispose, and impair assets\",\"icon\":\"upload\",\"collapsed\":false,\"tiles\":[{\"id\":\"cwip_asset_update\",\"title\":\"CWIP Asset Update\",\"subtitle\":\"Update CWIP asset details and mappings\",\"icon\":\"upload\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CWIP_ASSET_UPDATE\",\"accent\":\"#0ea5e9\",\"tags\":[\"cwip\",\"update\",\"asset\"],\"actionText\":\"Open\"},{\"id\":\"adjust_cwip_useful_life\",\"title\":\"Adjust CWIP Useful Life\",\"subtitle\":\"Adjust useful life for CWIP assets\",\"icon\":\"refresh\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"ADJUST_CWIP_USEFUL_LIFE\",\"accent\":\"#7c3aed\",\"tags\":[\"cwip\",\"useful life\",\"adjust\"],\"actionText\":\"Open\"},{\"id\":\"cwip_transfer\",\"title\":\"CWIP Transfer\",\"subtitle\":\"Transfer CWIP assets across classifications\",\"icon\":\"upload\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CWIP_TRANSFER\",\"accent\":\"#14b8a6\",\"tags\":[\"cwip\",\"transfer\"],\"actionText\":\"Transfer\"},{\"id\":\"asset_disposal\",\"title\":\"Asset Disposal\",\"subtitle\":\"Maintain asset disposal entries\",\"icon\":\"target\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"ASSET_DISPOSAL\",\"accent\":\"#ef4444\",\"tags\":[\"asset\",\"disposal\"],\"actionText\":\"Open\"},{\"id\":\"asset_impairment\",\"title\":\"Asset Impairment\",\"subtitle\":\"Maintain asset impairment adjustments\",\"icon\":\"document\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"ASSET_IMPAIRMENT\",\"accent\":\"#f97316\",\"tags\":[\"asset\",\"impairment\"],\"actionText\":\"Open\"}]},{\"id\":\"reports\",\"title\":\"Reports\",\"subtitle\":\"Review actual and estimate reporting outputs\",\"icon\":\"document\",\"collapsed\":false,\"tiles\":[{\"id\":\"total_depreciation_review\",\"title\":\"Total Depreciation Review\",\"subtitle\":\"Analyze depreciation totals and trends\",\"icon\":\"document\",\"type\":\"report\",\"targetType\":\"story\",\"target\":\"TOTAL_DEPRECIATION_REVIEW\",\"accent\":\"#f59e0b\",\"tags\":[\"report\",\"depreciation\"],\"actionText\":\"View\"},{\"id\":\"capex_spend_review\",\"title\":\"Capex Spend Review\",\"subtitle\":\"Review capital expenditure performance\",\"icon\":\"document\",\"type\":\"report\",\"targetType\":\"story\",\"target\":\"CAPEX_SPEND_REVIEW\",\"accent\":\"#ef4444\",\"tags\":[\"report\",\"capex\",\"spend\"],\"actionText\":\"View\"},{\"id\":\"net_book_value\",\"title\":\"Net Book Value\",\"subtitle\":\"Review net book value reporting output\",\"icon\":\"document\",\"type\":\"report\",\"targetType\":\"story\",\"target\":\"NET_BOOK_VALUE\",\"accent\":\"#14b8a6\",\"tags\":[\"report\",\"nbv\",\"net book value\"],\"actionText\":\"View\"},{\"id\":\"comparison_report\",\"title\":\"Comparison Report\",\"subtitle\":\"Compare actual versus estimate measures\",\"icon\":\"document\",\"type\":\"report\",\"targetType\":\"story\",\"target\":\"COMPARISON_REPORT\",\"accent\":\"#8b5cf6\",\"tags\":[\"report\",\"comparison\",\"actual\",\"estimate\"],\"actionText\":\"View\"}]}]},{\"id\":\"budget\",\"label\":\"Budget\",\"icon\":\"target\",\"title\":\"CAPEX PLANNING - BUDGET\",\"subtitle\":\"Create, upload, review, and analyze budget planning activities\",\"stats\":{\"card1Label\":\"Modules\",\"card1Value\":\"3\",\"card1Icon\":\"grid\",\"card2Label\":\"Reports\",\"card2Value\":\"3\",\"card2Icon\":\"document\",\"card3Label\":\"Actions\",\"card3Value\":\"9\",\"card3Icon\":\"target\",\"card4Label\":\"Links\",\"card4Value\":\"4\",\"card4Icon\":\"link\"},\"sections\":[{\"id\":\"budget_planning\",\"title\":\"Budget Planning\",\"subtitle\":\"Create and maintain budget planning entries\",\"icon\":\"target\",\"collapsed\":false,\"tiles\":[{\"id\":\"create_budget_asset\",\"title\":\"Create Budget Asset\",\"subtitle\":\"Create a new budget asset planning request\",\"icon\":\"target\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"CREATE_BUDGET_ASSET\",\"accent\":\"#2563eb\",\"tags\":[\"budget\",\"create\",\"asset\"],\"actionText\":\"Create\"},{\"id\":\"upload_budget_assets\",\"title\":\"Upload Budget Assets\",\"subtitle\":\"Bulk upload budget planning assets\",\"icon\":\"upload\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"UPLOAD_BUDGET_ASSETS\",\"accent\":\"#06b6d4\",\"tags\":[\"budget\",\"upload\",\"assets\"],\"actionText\":\"Upload\"},{\"id\":\"budget_useful_life\",\"title\":\"Adjust Budget Useful Life\",\"subtitle\":\"Maintain useful life assumptions for budget planning\",\"icon\":\"refresh\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"BUDGET_USEFUL_LIFE\",\"accent\":\"#8b5cf6\",\"tags\":[\"budget\",\"useful life\",\"adjust\"],\"actionText\":\"Open\"},{\"id\":\"budget_asset_acquisition\",\"title\":\"Plan Budget Asset Acquisition\",\"subtitle\":\"Maintain budget asset acquisition plans\",\"icon\":\"target\",\"type\":\"story\",\"targetType\":\"story\",\"target\":\"BUDGET_ASSET_ACQUISITION\",\"accent\":\"#f59e0b\",\"tags\":[\"budget\",\"acquisition\",\"asset\"],\"actionText\":\"Open\"}]},{\"id\":\"budget_reports\",\"title\":\"Budget Reports\",\"subtitle\":\"Budget review and comparison reporting\",\"icon\":\"document\",\"collapsed\":false,\"tiles\":[{\"id\":\"budget_spend_review\",\"title\":\"Budget Spend Review\",\"subtitle\":\"Review budget spend performance\",\"icon\":\"document\",\"type\":\"report\",\"targetType\":\"story\",\"target\":\"BUDGET_SPEND_REVIEW\",\"accent\":\"#ef4444\",\"tags\":[\"budget\",\"report\",\"spend\"],\"actionText\":\"View\"},{\"id\":\"budget_comparison_report\",\"title\":\"Budget Comparison Report\",\"subtitle\":\"Compare budget scenarios and versions\",\"icon\":\"document\",\"type\":\"report\",\"targetType\":\"story\",\"target\":\"BUDGET_COMPARISON_REPORT\",\"accent\":\"#14b8a6\",\"tags\":[\"budget\",\"comparison\",\"report\"],\"actionText\":\"View\"},{\"id\":\"budget_net_book_value\",\"title\":\"Budget Net Book Value\",\"subtitle\":\"Review budget net book value outputs\",\"icon\":\"document\",\"type\":\"report\",\"targetType\":\"story\",\"target\":\"BUDGET_NET_BOOK_VALUE\",\"accent\":\"#7c3aed\",\"tags\":[\"budget\",\"nbv\",\"report\"],\"actionText\":\"View\"}]},{\"id\":\"custom_links\",\"title\":\"Custom Links\",\"subtitle\":\"Add or maintain custom links directly from frontend configuration\",\"icon\":\"link\",\"collapsed\":false,\"tiles\":[{\"id\":\"budget_policy\",\"title\":\"Budget Policy\",\"subtitle\":\"Open budget policy or supporting documentation\",\"icon\":\"link\",\"type\":\"link\",\"targetType\":\"url\",\"target\":\"https://example.com/budget-policy\",\"accent\":\"#0ea5e9\",\"tags\":[\"budget\",\"policy\",\"link\"],\"actionText\":\"Open Link\"},{\"id\":\"budget_manual\",\"title\":\"Budget User Manual\",\"subtitle\":\"Open budget process user manual\",\"icon\":\"document\",\"type\":\"link\",\"targetType\":\"url\",\"target\":\"https://example.com/budget-user-manual\",\"accent\":\"#2563eb\",\"tags\":[\"budget\",\"manual\",\"guide\"],\"actionText\":\"Open Link\"}]}]}]}"
     },
     "themeJson": {
       "type": "string",
       "default": "{\"primary\":\"#0f4c97\",\"secondary\":\"#3b82f6\",\"accent\":\"#60a5fa\",\"surface\":\"#ffffff\",\"background\":\"#eef4fb\",\"text\":\"#12304f\",\"muted\":\"#6b7c93\",\"border\":\"#d9e6f2\",\"heroText\":\"#ffffff\"}"
     },
-    "quickLinksJson": {
-      "type": "string",
-      "default": "[{\"id\":\"quick_admin\",\"title\":\"Admin Cockpit\",\"target\":\"ADMIN_COCKPIT\",\"targetType\":\"story\",\"icon\":\"grid\"},{\"id\":\"quick_actual\",\"title\":\"Actual + Estimate\",\"target\":\"ACTUAL_ESTIMATE\",\"targetType\":\"story\",\"icon\":\"document\"},{\"id\":\"quick_budget\",\"title\":\"Budget\",\"target\":\"BUDGET_PAGE\",\"targetType\":\"story\",\"icon\":\"target\"}]"
-    },
     "layoutJson": {
       "type": "string",
       "default": "{\"heroRadius\":22,\"sectionRadius\":20,\"tileRadius\":18,\"tileMinHeight\":140,\"sectionTitleSize\":24,\"tileTitleSize\":18,\"contentMaxWidth\":\"100%\"}"
+    },
+    "activeSpace": {
+      "type": "string",
+      "default": "admin"
     },
     "searchText": {
       "type": "string",
@@ -71,7 +63,7 @@
   },
   "methods": {
     "setConfig": {
-      "description": "Set full landing page configuration JSON",
+      "description": "Set full multi-space landing page configuration JSON",
       "parameters": [
         { "name": "json", "type": "string" }
       ]
@@ -79,20 +71,8 @@
     "getConfig": {
       "returnType": "string"
     },
-    "setStats": {
-      "description": "Set KPI statistics JSON",
-      "parameters": [
-        { "name": "json", "type": "string" }
-      ]
-    },
     "setTheme": {
-      "description": "Set theme token JSON",
-      "parameters": [
-        { "name": "json", "type": "string" }
-      ]
-    },
-    "setQuickLinks": {
-      "description": "Set quick links JSON",
+      "description": "Set theme JSON",
       "parameters": [
         { "name": "json", "type": "string" }
       ]
@@ -101,6 +81,12 @@
       "description": "Set layout JSON",
       "parameters": [
         { "name": "json", "type": "string" }
+      ]
+    },
+    "setActiveSpace": {
+      "description": "Switch active space",
+      "parameters": [
+        { "name": "value", "type": "string" }
       ]
     },
     "setSearchText": {
@@ -123,13 +109,8 @@
         { "name": "value", "type": "string" }
       ]
     },
-    "setPageKey": {
-      "parameters": [
-        { "name": "value", "type": "string" }
-      ]
-    },
     "refresh": {
-      "description": "Refresh widget UI from current properties"
+      "description": "Refresh widget UI"
     },
     "getSelectedTile": {
       "returnType": "string"
@@ -141,6 +122,7 @@
   "events": {
     "onTileClick": {},
     "onQuickLinkClick": {},
+    "onSpaceChange": {},
     "onSearch": {},
     "onSectionToggle": {},
     "onConfigChange": {},
